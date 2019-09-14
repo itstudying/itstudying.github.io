@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="itstudying.lijq">
+  
+  
+  
+  
+  <link rel="next" href="https://example.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" />
+  <link rel="canonical" href="https://example.com/2019/utf-16letoutf-8/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           golang utf-16le编码转换至utf-8 | itstudying
+       
+  </title>
+  <meta name="title" content="golang utf-16le编码转换至utf-8 | itstudying">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "golang utf-16le编码转换至utf-8",
+    "headline" : "golang utf-16le编码转换至utf-8",
+    "description" : "golang utf-16le编码转换至utf-8  最近工作中在做解析港股数据相关工作，香港交易所提供的 OMD-MMDH 服务将数据以字节流的形式下发，其中汉字使用utf16编码，而 golang 程序则默认utf8编码，所以需要对数据做转换，特此对 Unicode 相关知识以及 golang 实现utf16 转换至 utf8 的方法做下学习笔记\n BOM简介 BOM(Byte Order Mark) 既字节序标记，一般是出现在以Unicode编码的文件开始的头部。带BOM的Unicode编码文件查看其二进制编码会出现以下数据，下面只是一些常用的字符编码\n   字符编码 Bom (十六进制)     UTF-8 EF BB BF   UTF-16 (BE) 大端序 FE FF   UTF-16 (LE) 小端序 FF FE   UTF-32 (BE) 大端序 00 00 FE FF   UTF-32 (LE) 小端序 FF FE 00 00   GB-18030 84 31 95 33    Unicode编码简介  Unicode 是容纳世界所有文字符号的国际标准编码，使用四个字节为每个字符编码。",
+    "inLanguage" : "en-us",
+    "author" : "itstudying",
+    "creator" : "itstudying",
+    "publisher": "itstudying",
+    "accountablePerson" : "itstudying",
+    "copyrightHolder" : "itstudying",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-02-23 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-02-23 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2019\/utf-16letoutf-8\/",
+    "wordCount" : "219",
+    "keywords" : [ "golang", "itstudying"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class=""></i></a>&nbsp;<a href="https://example.com">itstudying</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">itstudying</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">golang utf-16le编码转换至utf-8</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">itstudying</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-02-23 itemprop="datePublished">February 23, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://example.com/categories/%E5%90%8E%E7%AB%AF/"> 后端 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h2 id="golang-utf-16le编码转换至utf-8">golang utf-16le编码转换至utf-8</h2>
+
+<blockquote>
+<p>最近工作中在做解析港股数据相关工作，香港交易所提供的 OMD-MMDH 服务将数据以字节流的形式下发，其中汉字使用utf16编码，而 golang 程序则默认utf8编码，所以需要对数据做转换，特此对 Unicode 相关知识以及 golang 实现utf16 转换至 utf8 的方法做下学习笔记</p>
+</blockquote>
+
+<h3 id="bom简介">BOM简介</h3>
+
+<p><strong>BOM(Byte Order Mark)</strong> 既字节序标记，一般是出现在以Unicode编码的文件开始的头部。带BOM的Unicode编码文件查看其二进制编码会出现以下数据，下面只是一些常用的字符编码</p>
+
+<table>
+<thead>
+<tr>
+<th>字符编码</th>
+<th>Bom (十六进制)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>UTF-8</td>
+<td>EF BB BF</td>
+</tr>
+
+<tr>
+<td>UTF-16 (BE) 大端序</td>
+<td>FE FF</td>
+</tr>
+
+<tr>
+<td>UTF-16 (LE) 小端序</td>
+<td>FF FE</td>
+</tr>
+
+<tr>
+<td>UTF-32 (BE) 大端序</td>
+<td>00 00 FE FF</td>
+</tr>
+
+<tr>
+<td>UTF-32 (LE) 小端序</td>
+<td>FF FE 00 00</td>
+</tr>
+
+<tr>
+<td>GB-18030</td>
+<td>84 31 95 33</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="unicode编码简介">Unicode编码简介</h3>
+
+<ul>
+<li><p><strong>Unicode</strong> 是容纳世界所有文字符号的国际标准编码，使用四个字节为每个字符编码。</p></li>
+
+<li><p><strong>UTF</strong> 是英文 Unicode Transformation Format 的缩写，意为把 Unicode 字符转换为某种格式。UTF 系列编码方案（UTF-8、UTF-16、UTF-32）均是由 Unicode 编码方案衍变而来，以适应不同的数据存储或传递，它们都可以完全表示 Unicode 标准中的所有字符。目前，这些衍变方案中 UTF-8 被广泛使用，而 UTF-16 和 UTF-32 则很少被使用。</p></li>
+
+<li><p><strong>UTF-8</strong> 使用一至四个字节为每个字符编码，其中大部分汉字采用三个字节编码，少量不常用汉字采用四个字节编码。因为 UTF-8 是可变长度的编码方式，相对于 Unicode 编码可以减少存储占用的空间，所以被广泛使用。</p></li>
+
+<li><p><strong>UTF-16</strong> 使用二或四个字节为每个字符编码，其中大部分汉字采用两个字节编码，少量不常用汉字采用四个字节编码。UTF-16 编码有大端序和小端序之别，即 UTF-16BE 和 UTF-16LE，在编码前会放置一个 U+FEFF 或 U+FFFE（UTF-16BE 以 FEFF 代表，UTF-16LE 以 FFFE 代表），其中 U+FEFF 字符在 Unicode 中代表的意义是 ZERO WIDTH NO-BREAK SPACE，顾名思义，它是个没有宽度也没有断字的空白。</p></li>
+
+<li><p><strong>UTF-32</strong> 使用四个字节为每个字符编码，使得 UTF-32 占用空间通常会是其它编码的二到四倍。UTF-32 与 UTF-16 一样有大端序和小端序之别，编码前会放置 U+0000FEFF 或 U+0000FFFE 以区分。</p></li>
+</ul>
+
+<h3 id="大端序和小端序">大端序和小端序</h3>
+
+<ul>
+<li>大端：大端就是内存中的低位地址存放对应整数的高位。</li>
+
+<li><p>小端：小端就是内存中的低位地址存放对应整数的低位。</p>
+
+<pre><code class="language-java">字节数组：[0 1 2]
+
+按照大端序转换成二进制为：
+0 0 0 0 0 0 0 0 | 0 0 0 0 0 0 0 1 | 0 0 0 0 0 0 1 0
+
+按照小端序转换成二进制为：
+0 0 0 0 0 0 1 0 | 0 0 0 0 0 0 0 1 | 0 0 0 0 0 0 0 0
+
+所以字节数组[0 1 2]大端序十进制为：258，小端序为：131328
+</code></pre></li>
+</ul>
+
+<p>golang中的转换实现参考<code>binary</code>包</p>
+
+<h3 id="golang-转换utf-16编码至utf-8">golang 转换utf-16编码至utf-8</h3>
+
+<p>utf-16 在做转换时不能忽视该编码的大端序和小端序区别，不然将会导致乱码，转换使用到包<code>golang.org/x/text/encoding/unicode</code>，</p>
+
+<pre><code class="language-go">bs := [8]byte{93, 78, 95, 134, 75, 144, 26, 144}
+decoder := unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewDecoder()
+bs2, err := decoder.Bytes(bs[:])
+fmt.Println(string(bs2), err)
+</code></pre>
+
+<p>output&hellip;</p>
+
+<pre><code class="language-go">九號運通 &lt;nil&gt;
+</code></pre>
+
+<p><code>unicode.LittleEndian</code>指定为小端序</p>
+
+<p><code>unicode.IgnoreBOM</code>忽略BOM标记</p>
+
+<p>参考链接：
+- <a href="https://www.qqxiuzi.cn/bianma/Unicode-UTF.php" rel="nofollow noreferrer" target="_blank">Unicode 简介</a></p>
+
+<ul>
+<li><p><a href="https://blog.csdn.net/rodbate/article/details/76296131" rel="nofollow noreferrer" target="_blank">BOM 简介</a></p></li>
+
+<li><p><a href="https://godoc.org/golang.org/x/text/encoding/unicode#UTF16" rel="nofollow noreferrer" target="_blank">unicode - GoDoc</a></p></li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>itstudying.lijq </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2019/utf-16letoutf-8/>https://example.com/2019/utf-16letoutf-8/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://example.com/tags/golang/">
+                    #golang</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+         
+        
+        <a href="https://example.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" class="next" rel="next" title="jenkins 跨机房自动部署方案">jenkins 跨机房自动部署方案&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2015 - 2019</span>
+        
+        <span class="with-love">
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">itstudying.lijq</a> | </span> 
+         
+
+         
+		  <span>本博客由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a> 强力驱动</span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+     </div>
+  </body>
+</html>
