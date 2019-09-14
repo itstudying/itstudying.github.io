@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on itstudying</title>
-    <link>https://example.com/posts/</link>
+    <link>https://itstudying.com/posts/</link>
     <description>Recent content in Posts on itstudying</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 14 Sep 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://example.com/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://itstudying.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>jenkins 跨机房自动部署方案</title>
-      <link>https://example.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/</link>
+      <link>https://itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/</link>
       <pubDate>Sat, 14 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/</guid>
+      <guid>https://itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/</guid>
       <description>jenkins 跨机房自动部署方案 嘿嘿，首先不进入正题。这两天趁着假期把笔记内容都给整理了一番，这些大多是平时写代码的总结，以及看过的一些文章的转载和笔记，数了一下大概将近150篇文章。每次V站上秀博客我的特想秀下我的域名，只是我现在这小站 itstudying 太简陋了点，空有外表,实际啥内容也没，只有个个人简介在里面。而且我还花钱买了个服务器挂着它，与其闲着它不用还不如把这些笔记整理下放上去，文章倒不是多牛逼，只是些自己的个人总结，所悟所思所想而已。
 对于不同机房，网络互不相同情况下部署解决方法 正常情况下想要使用jenkins做自动化部署只需要安装Publish Over SSH插件即可，但是不同机房、网络不通得情况下就不能使用此插件了，像我们公司有三个机房，难道每个机房都配一个jenkins吗。。。又或者手动部署？？。。 也很奇怪网上没有合适的解决办法，可能是大佬们觉得问题太过简单了吧。
 网络环境
@@ -27,10 +27,10 @@ config.toml main   新建两个辅助部署脚本deploy.sh和重启脚本restart
     
     <item>
       <title>golang utf-16le编码转换至utf-8</title>
-      <link>https://example.com/2019/utf-16letoutf-8/</link>
+      <link>https://itstudying.com/2019/utf-16letoutf-8/</link>
       <pubDate>Sat, 23 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/2019/utf-16letoutf-8/</guid>
+      <guid>https://itstudying.com/2019/utf-16letoutf-8/</guid>
       <description>golang utf-16le编码转换至utf-8  最近工作中在做解析港股数据相关工作，香港交易所提供的 OMD-MMDH 服务将数据以字节流的形式下发，其中汉字使用utf16编码，而 golang 程序则默认utf8编码，所以需要对数据做转换，特此对 Unicode 相关知识以及 golang 实现utf16 转换至 utf8 的方法做下学习笔记
  BOM简介 BOM(Byte Order Mark) 既字节序标记，一般是出现在以Unicode编码的文件开始的头部。带BOM的Unicode编码文件查看其二进制编码会出现以下数据，下面只是一些常用的字符编码
    字符编码 Bom (十六进制)     UTF-8 EF BB BF   UTF-16 (BE) 大端序 FE FF   UTF-16 (LE) 小端序 FF FE   UTF-32 (BE) 大端序 00 00 FE FF   UTF-32 (LE) 小端序 FF FE 00 00   GB-18030 84 31 95 33    Unicode编码简介  Unicode 是容纳世界所有文字符号的国际标准编码，使用四个字节为每个字符编码。</description>

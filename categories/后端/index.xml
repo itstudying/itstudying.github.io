@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>后端 on itstudying</title>
-    <link>https://example.com/categories/%E5%90%8E%E7%AB%AF/</link>
+    <link>https://itstudying.com/categories/%E5%90%8E%E7%AB%AF/</link>
     <description>Recent content in 后端 on itstudying</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 23 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://example.com/categories/%E5%90%8E%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://itstudying.com/categories/%E5%90%8E%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>golang utf-16le编码转换至utf-8</title>
-      <link>https://example.com/2019/utf-16letoutf-8/</link>
+      <link>https://itstudying.com/2019/utf-16letoutf-8/</link>
       <pubDate>Sat, 23 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/2019/utf-16letoutf-8/</guid>
+      <guid>https://itstudying.com/2019/utf-16letoutf-8/</guid>
       <description>golang utf-16le编码转换至utf-8  最近工作中在做解析港股数据相关工作，香港交易所提供的 OMD-MMDH 服务将数据以字节流的形式下发，其中汉字使用utf16编码，而 golang 程序则默认utf8编码，所以需要对数据做转换，特此对 Unicode 相关知识以及 golang 实现utf16 转换至 utf8 的方法做下学习笔记
  BOM简介 BOM(Byte Order Mark) 既字节序标记，一般是出现在以Unicode编码的文件开始的头部。带BOM的Unicode编码文件查看其二进制编码会出现以下数据，下面只是一些常用的字符编码
    字符编码 Bom (十六进制)     UTF-8 EF BB BF   UTF-16 (BE) 大端序 FE FF   UTF-16 (LE) 小端序 FF FE   UTF-32 (BE) 大端序 00 00 FE FF   UTF-32 (LE) 小端序 FF FE 00 00   GB-18030 84 31 95 33    Unicode编码简介  Unicode 是容纳世界所有文字符号的国际标准编码，使用四个字节为每个字符编码。</description>
