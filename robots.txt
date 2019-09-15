@@ -63,4 +63,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: https://itstudying.com/sitemap.xml
+Sitemap: https://blog.itstudying.com/sitemap.xml
