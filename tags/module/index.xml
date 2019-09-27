@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>module on itstudying</title>
+    <link>https://blog.itstudying.com/tags/module/</link>
+    <description>Recent content in module on itstudying</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 27 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.itstudying.com/tags/module/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>gomod交叉编译cannot find module for path…</title>
+      <link>https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/</link>
+      <pubDate>Wed, 27 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/</guid>
+      <description>gomod交叉编译cannot find module for path… 新建项目准备使用gomod管理依赖，而且项目没放在gopath的时候发现个问题，go build -o SI-Kline-Minute cmd/main.go能通过，GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd/main.go进行交叉编译报找不到module错误
+环境 项目结构
+├── Makefile ├── README.md ├── SI-Kline-Minute ├── cmd │ └── main.go ├── common │ ├── db │ │ ├── mongo │ │ │ └── mongo.go │ │ └── redis │ ├── log │ │ └── logger.go │ └── utils │ └── utils.go ├── config │ └── config.go ├── config.toml ├── go.mod ├── go.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="itstudying.lijq">
+  <meta name="description" content="Go语言,Golang开发,gopher,itstudying,李俊奇的个人主页. good good study,day day up.">
+  <meta name="keywords" content="itstudying, 个人主页, home, gopher, 李俊奇, 李俊奇的小站, 0.0">
+  
+  <link rel="prev" href="https://blog.itstudying.com/2019/utf-16letoutf-8/" />
+  <link rel="next" href="https://blog.itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" />
+  <link rel="canonical" href="https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           gomod交叉编译cannot find module for path… | itstudying
+       
+  </title>
+  <meta name="title" content="gomod交叉编译cannot find module for path… | itstudying">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+ 
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.itstudying.com"
+    },
+    "articleSection" : "posts",
+    "name" : "gomod交叉编译cannot find module for path…",
+    "headline" : "gomod交叉编译cannot find module for path…",
+    "description" : "gomod交叉编译cannot find module for path… 新建项目准备使用gomod管理依赖，而且项目没放在gopath的时候发现个问题，go build -o SI-Kline-Minute cmd\/main.go能通过，GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd\/main.go进行交叉编译报找不到module错误\n环境 项目结构\n├── Makefile ├── README.md ├── SI-Kline-Minute ├── cmd │ └── main.go ├── common │ ├── db │ │ ├── mongo │ │ │ └── mongo.go │ │ └── redis │ ├── log │ │ └── logger.go │ └── utils │ └── utils.go ├── config │ └── config.go ├── config.toml ├── go.mod ├── go.",
+    "inLanguage" : "en-us",
+    "author" : "itstudying",
+    "creator" : "itstudying",
+    "publisher": "itstudying",
+    "accountablePerson" : "itstudying",
+    "copyrightHolder" : "itstudying",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-03-27 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-03-27 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.itstudying.com\/2019\/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path\/",
+    "wordCount" : "169",
+    "keywords" : [ "golang","gomod","交叉编译","module", "itstudying"]
+}
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146687653-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-146687653-3');
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class=""></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">gomod交叉编译cannot find module for path…</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://blog.itstudying.com" rel="author">itstudying</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-03-27 itemprop="datePublished">March 27, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/"> 后端 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h1 id="gomod交叉编译cannot-find-module-for-path">gomod交叉编译cannot find module for path…</h1>
+
+<p>新建项目准备使用<code>gomod</code>管理依赖，而且项目没放在<code>gopath</code>的时候发现个问题，<code>go build -o SI-Kline-Minute cmd/main.go</code>能通过，<code>GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd/main.go</code>进行交叉编译报找不到module错误</p>
+
+<hr />
+
+<h2 id="环境">环境</h2>
+
+<p><em>项目结构</em></p>
+
+<pre><code class="language-go">├── Makefile
+├── README.md
+├── SI-Kline-Minute
+├── cmd
+│   └── main.go
+├── common
+│   ├── db
+│   │   ├── mongo
+│   │   │   └── mongo.go
+│   │   └── redis
+│   ├── log
+│   │   └── logger.go
+│   └── utils
+│       └── utils.go
+├── config
+│   └── config.go
+├── config.toml
+├── go.mod
+├── go.sum
+├── logs
+├── models
+│   ├── internal.go
+│   ├── kline.go
+│   └── stock.go
+└── vendor
+    ...
+    └── modules.txt
+
+</code></pre>
+
+<p><em>env</em></p>
+
+<pre><code class="language-go">GO111MODULE=&quot;on&quot;
+GOARCH=&quot;amd64&quot;
+GOBIN=&quot;&quot;
+GOCACHE=&quot;/Users/itstudying/Library/Caches/go-build&quot;
+GOENV=&quot;/Users/itstudying/Library/Application Support/go/env&quot;
+GOEXE=&quot;&quot;
+GOFLAGS=&quot; -mod=vendor&quot;
+GOHOSTARCH=&quot;amd64&quot;
+GOHOSTOS=&quot;darwin&quot;
+GONOPROXY=&quot;&quot;
+GONOSUMDB=&quot;&quot;
+GOOS=&quot;darwin&quot;
+GOPATH=&quot;/Users/itstudying/code/go&quot;
+GOPRIVATE=&quot;&quot;
+GOPROXY=&quot;https://goproxy.io&quot;
+GOROOT=&quot;/usr/local/go&quot;
+GOSUMDB=&quot;sum.golang.org&quot;
+GOTMPDIR=&quot;&quot;
+GOTOOLDIR=&quot;/usr/local/go/pkg/tool/darwin_amd64&quot;
+GCCGO=&quot;gccgo&quot;
+AR=&quot;ar&quot;
+CC=&quot;clang&quot;
+CXX=&quot;clang++&quot;
+CGO_ENABLED=&quot;1&quot;
+GOMOD=&quot;/Users/itstudying/code/hsl/SI-Kline-Minute/go.mod&quot;
+CGO_CFLAGS=&quot;-g -O2&quot;
+CGO_CPPFLAGS=&quot;&quot;
+CGO_CXXFLAGS=&quot;-g -O2&quot;
+CGO_FFLAGS=&quot;-g -O2&quot;
+CGO_LDFLAGS=&quot;-g -O2&quot;
+PKG_CONFIG=&quot;pkg-config&quot;
+GOGCCFLAGS=&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/gt/jqhlsj9126z_qlrnfbkvhshm0000gn/T/go-build003969582=/tmp/go-build -gno-record-gcc-switches -fno-common&quot;
+
+</code></pre>
+
+<p><em>version</em></p>
+
+<pre><code class="language-go">go version
+go version go1.13 darwin/amd64
+</code></pre>
+
+<hr />
+
+<h2 id="问题">问题</h2>
+
+<ol>
+<li><p>执行<code>go build</code> 进行打包能成功</p>
+
+<pre><code class="language-go">go build cmd/main.go
+</code></pre></li>
+
+<li><p>交叉编译打包失败</p>
+
+<pre><code class="language-go">GOOS=linux GOARCH=amd64 go build cmd/main.go                  
+build command-line-arguments: cannot find module for path SI-Kline-Minute/common/utils
+
+</code></pre></li>
+</ol>
+
+<p>查问题期间尝试了重命名包，修改<code>gomod</code>相关配置，把go从1.12升级至1.13依然没解决，甚至怀疑是不是大小写的问题。全部无果后细心观察<code>utils</code>包有啥特殊的地方，因为新建项目，代码量很少，从<code>项目结构</code>能看出<code>utils</code>和<code>log</code>, <code>db</code>是处在同级中，但是<code>log</code>和<code>db</code>却很正常，他们之间唯一区别是<code>log</code>包和<code>db</code>包需要在main中做些初始化的操作，所以会在<code>main</code>中就调用这两个包的方法，而<code>utils</code>包不需要，仅仅只有这个区别，然后抱着死马当成活马医的心理去尝试下，在main文件里加上初始化utils包的代码<code>_ &quot;SI-Kline-Minute/common/utils&quot;</code>，然后。。。。。。。。竟然编译通过了</p>
+
+<p>反复尝试，加上初始化代码能通过，去掉初始化代码编译报错找不到module</p>
+
+<p>加上初始化代码这样子能解决问题，而且也没觉得会有什么不妥，。。。。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>itstudying.lijq </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/>https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/golang/">
+                    #golang</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/gomod/">
+                    #gomod</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">
+                    #交叉编译</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/module/">
+                    #module</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://blog.itstudying.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.itstudying.com/2019/utf-16letoutf-8/" class="prev" rel="prev" title="golang utf-16le编码转换至utf-8"><i class="iconfont icon-left"></i>&nbsp;golang utf-16le编码转换至utf-8</a>
+         
+        
+        <a href="https://blog.itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" class="next" rel="next" title="jenkins 跨机房自动部署方案">jenkins 跨机房自动部署方案&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2015 - 2019</span>
+        
+        <span class="with-love">
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://blog.itstudying.com">itstudying.lijq</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">皖ICP备16024028号-2 </a> |
+         
+		  <span>本博客由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a> 强力驱动</span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+     </div>
+  </body>
+</html>
