@@ -6,10 +6,19 @@
     <description>Recent content in Categories on itstudying</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.itstudying.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>后端</title>
+      <link>https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/</link>
+      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>运维</title>
@@ -17,15 +26,6 @@
       <pubDate>Sat, 14 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://blog.itstudying.com/categories/%E8%BF%90%E7%BB%B4/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>后端</title>
-      <link>https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/</link>
-      <pubDate>Wed, 27 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/</guid>
       <description></description>
     </item>
     

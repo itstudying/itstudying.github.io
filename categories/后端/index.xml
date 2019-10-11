@@ -6,10 +6,27 @@
     <description>Recent content in 后端 on itstudying</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Golang socket websocket</title>
+      <link>https://blog.itstudying.com/2019/golang_socket_websocket/</link>
+      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/2019/golang_socket_websocket/</guid>
+      <description>经作者授权转发 原文链接：https://www.jianshu.com/p/c0db1567bfd9
+ Golang socket websocket 理论知识可以参考
+网络信息怎么在网线中传播的 （转载自知乎）
+Android 网络(一) 概念 TCP/IP Socket Http Restful
+脑残式网络编程入门(一)：跟着动画来学TCP三次握手和四次挥手
+脑残式网络编程入门(二)：我们在读写Socket时，究竟在读写什么？
+TCP 粘包问题浅析及其解决方案，这个帖子里大家一顿喷粘包这个叫法
+我工作五年的时候也不知道 “TCP 粘包”，继续吐槽
+一、API 1.服务端通过Listen加Accept package main import ( &amp;quot;fmt&amp;quot; &amp;quot;net&amp;quot; &amp;quot;os&amp;quot; &amp;quot;time&amp;quot; ) func main() { //通过 ResolveTCPAddr 获取一个 TCPAddr //ResolveTCPAddr(net, addr string) (*TCPAddr, os.Error) //net参数是&amp;quot;tcp4&amp;quot;、&amp;quot;tcp6&amp;quot;、&amp;quot;tcp&amp;quot;中的任意一个， //分别表示 TCP(IPv4-only),TCP(IPv6-only) //或者 TCP(IPv4,IPv6 的任意一个) //addr 表示域名或者IP地址， //例如&amp;quot;www.google.com:80&amp;quot; 或者&amp;quot;127.0.0.1:22&amp;quot;. service := &amp;quot;:7777&amp;quot; tcpAddr, err := net.ResolveTCPAddr(&amp;quot;tcp4&amp;quot;, service) checkError(err) //ListenTCP(net string, laddr *TCPAddr) (l *TCPListener, err os.</description>
+    </item>
     
     <item>
       <title>gomod交叉编译cannot find module for path…</title>

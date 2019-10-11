@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="itstudying.lijq">
+  <meta name="description" content="Go语言,Golang开发,gopher,itstudying,李俊奇的个人主页. good good study,day day up.">
+  <meta name="keywords" content="itstudying, 个人主页, home, gopher, 李俊奇, 李俊奇的小站, 0.0">
+  
+  <link rel="prev" href="https://blog.itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" />
+  
+  <link rel="canonical" href="https://blog.itstudying.com/2019/golang_socket_websocket/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Golang socket websocket | itstudying
+       
+  </title>
+  <meta name="title" content="Golang socket websocket | itstudying">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+ 
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.itstudying.com"
+    },
+    "articleSection" : "posts",
+    "name" : "Golang socket websocket",
+    "headline" : "Golang socket websocket",
+    "description" : "经作者授权转发 原文链接：https:\/\/www.jianshu.com\/p\/c0db1567bfd9\n Golang socket websocket 理论知识可以参考\n网络信息怎么在网线中传播的 （转载自知乎）\nAndroid 网络(一) 概念 TCP\/IP Socket Http Restful\n脑残式网络编程入门(一)：跟着动画来学TCP三次握手和四次挥手\n脑残式网络编程入门(二)：我们在读写Socket时，究竟在读写什么？\nTCP 粘包问题浅析及其解决方案，这个帖子里大家一顿喷粘包这个叫法\n我工作五年的时候也不知道 “TCP 粘包”，继续吐槽\n一、API 1.服务端通过Listen加Accept package main import ( \x26quot;fmt\x26quot; \x26quot;net\x26quot; \x26quot;os\x26quot; \x26quot;time\x26quot; ) func main() { \/\/通过 ResolveTCPAddr 获取一个 TCPAddr \/\/ResolveTCPAddr(net, addr string) (*TCPAddr, os.Error) \/\/net参数是\x26quot;tcp4\x26quot;、\x26quot;tcp6\x26quot;、\x26quot;tcp\x26quot;中的任意一个， \/\/分别表示 TCP(IPv4-only),TCP(IPv6-only) \/\/或者 TCP(IPv4,IPv6 的任意一个) \/\/addr 表示域名或者IP地址， \/\/例如\x26quot;www.google.com:80\x26quot; 或者\x26quot;127.0.0.1:22\x26quot;. service := \x26quot;:7777\x26quot; tcpAddr, err := net.ResolveTCPAddr(\x26quot;tcp4\x26quot;, service) checkError(err) \/\/ListenTCP(net string, laddr *TCPAddr) (l *TCPListener, err os.",
+    "inLanguage" : "en-us",
+    "author" : "合肥懒皮",
+    "creator" : "合肥懒皮",
+    "publisher": "合肥懒皮",
+    "accountablePerson" : "合肥懒皮",
+    "copyrightHolder" : "合肥懒皮",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-10-11 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-10-11 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.itstudying.com\/2019\/golang_socket_websocket\/",
+    "wordCount" : "1255",
+    "keywords" : [ "golang","socket","websocket","tcp", "itstudying"]
+}
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146687653-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-146687653-3');
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class=""></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Golang socket websocket</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://blog.itstudying.com" rel="author">合肥懒皮</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-10-11 itemprop="datePublished">October 11, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/"> 后端 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<blockquote>
+<p>经作者授权转发 原文链接：<a href="https://www.jianshu.com/p/c0db1567bfd9" rel="nofollow noreferrer" target="_blank">https://www.jianshu.com/p/c0db1567bfd9</a></p>
+</blockquote>
+
+<h1 id="golang-socket-websocket">Golang socket websocket</h1>
+
+<p>理论知识可以参考<br />
+<a href="https://www.jianshu.com/p/efcb7790f0a4" rel="nofollow noreferrer" target="_blank">网络信息怎么在网线中传播的 （转载自知乎）</a><br />
+<a href="https://www.jianshu.com/p/d198b3080432" rel="nofollow noreferrer" target="_blank">Android 网络(一) 概念 TCP/IP Socket Http Restful</a><br />
+脑残式网络编程入门(一)：跟着动画来学TCP三次握手和四次挥手<br />
+<a href="https://zhuanlan.zhihu.com/p/39068727" rel="nofollow noreferrer" target="_blank">脑残式网络编程入门(二)：我们在读写Socket时，究竟在读写什么？</a><br />
+<strong><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.v2ex.com%2Ft%2F478610" rel="nofollow noreferrer" target="_blank">TCP 粘包问题浅析及其解决方案</a>，这个帖子里大家一顿喷粘包这个叫法</strong><br />
+<a href="https://www.v2ex.com/t/519253" rel="nofollow noreferrer" target="_blank">我工作五年的时候也不知道 “TCP 粘包”</a>，继续吐槽</p>
+
+<h6 id="一-api">一、API</h6>
+
+<h6 id="1-服务端通过listen加accept">1.服务端通过Listen加Accept</h6>
+
+<pre><code class="language-go">    package main
+    
+    import (
+        &quot;fmt&quot;
+        &quot;net&quot;
+        &quot;os&quot;
+        &quot;time&quot;
+    )
+    
+    func main() {
+        //通过 ResolveTCPAddr 获取一个 TCPAddr
+        //ResolveTCPAddr(net, addr string) (*TCPAddr, os.Error)
+        
+        //net参数是&quot;tcp4&quot;、&quot;tcp6&quot;、&quot;tcp&quot;中的任意一个，
+        //分别表示 TCP(IPv4-only),TCP(IPv6-only)
+        //或者 TCP(IPv4,IPv6 的任意一个)
+        
+        //addr 表示域名或者IP地址，
+        //例如&quot;www.google.com:80&quot; 或者&quot;127.0.0.1:22&quot;.
+        service := &quot;:7777&quot;
+        tcpAddr, err := net.ResolveTCPAddr(&quot;tcp4&quot;, service)
+        checkError(err)
+        
+        //ListenTCP(net string, laddr *TCPAddr) (l *TCPListener, err os.Error)
+        listener, err := net.ListenTCP(&quot;tcp&quot;, tcpAddr)
+        checkError(err)
+        
+        //func (l *TCPListener) Accept() (c Conn, err os.Error)
+        for {
+            conn, err := listener.Accept()
+                if err != nil {
+                continue
+            }
+            
+            daytime := time.Now().String()
+            // don't care about return value
+            conn.Write([]byte(daytime)) 
+            
+            // we're finished with this client
+            conn.Close() 
+        }
+    }
+    
+    func checkError(err error) {
+        if err != nil {
+            fmt.Fprintf(os.Stderr, &quot;Fatal error: %s&quot;, err.Error())
+            os.Exit(1)
+        }
+    }
+    
+</code></pre>
+
+<p>上面的服务跑起来之后，它将会一直在那里等待，直到有新的客户端请求到达。当有新的客户端请求到达并同意接受 Accept 该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中 for 循环里，当有错误发生时，直接 continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。</p>
+
+<p>上面的代码有个缺点，执行的时候是单任务的，不能同时接收多个请求，那么该如何改造以使它支持多并发呢？</p>
+
+<pre><code class="language-go">    ...
+    for {
+        conn, err := listener.Accept()
+        if err != nil {
+            continue
+        }
+        go handlerClient(conn)
+    }
+    ...
+    
+    func handleClient(conn net.Conn) {
+        defer conn.Close()
+        daytime := time.Now().String()
+        // don't care about return value
+        conn.Write([]byte(daytime)) 
+        
+        // we're finished with this client
+    }
+    ...
+    
+</code></pre>
+
+<h6 id="2-客户端直接调用-dial">2.客户端直接调用 Dial</h6>
+
+<pre><code class="language-go">    package main
+        import (
+            &quot;fmt&quot;
+            &quot;io/ioutil&quot;
+            &quot;net&quot;
+            &quot;os&quot;
+        )
+        
+        func main() {
+            if len(os.Args) != 2 {
+                fmt.Fprintf(os.Stderr, &quot;Usage: %s host:port &quot;, os.Args[0])
+                os.Exit(1)
+            }
+        
+            service := os.Args[1]
+            tcpAddr, err := net.ResolveTCPAddr(&quot;tcp4&quot;, service)
+            checkError(err)
+            
+            conn, err := net.DialTCP(&quot;tcp&quot;, nil, tcpAddr)
+            checkError(err)
+            
+            _, err = conn.Write([]byte(&quot;HEAD / HTTP/1.0\r\n\r\n&quot;))
+            checkError(err)
+            
+            result, err := ioutil.ReadAll(conn)
+            checkError(err)
+            
+            fmt.Println(string(result))
+            os.Exit(0)
+        }
+        
+        func checkError(err error) {
+            if err != nil {
+            fmt.Fprintf(os.Stderr, &quot;Fatal error: %s&quot;, err.Error())
+            os.Exit(1)
+        }
+    }
+    
+</code></pre>
+
+<p>首先程序将用户的输入作为参数 service 传入net.ResolveTCPAddr 获取一个 tcpAddr,然后把 tcpAddr 传入 DialTCP 后创建了一个 TCP连接 conn ，通过 conn 来发送请求信息，最后通过 ioutil.ReadAll 从 conn 中读取全部的文本，也就是服务端响应反馈的信息。</p>
+
+<h6 id="二-实现一个可以接受不同命令的服务端">二、实现一个可以接受不同命令的服务端</h6>
+
+<p>参考<a href="https://hiberabyss.github.io/2018/03/14/unix-socket-programming/" rel="nofollow noreferrer" target="_blank">使用 Go 进行 Socket 编程</a><br />
+我们实现一个服务端, 它可以接受下面这些命令:</p>
+
+<ul>
+<li>ping 探活的命令, 服务端会返回 “pong”</li>
+<li>echo 服务端会返回收到的字符串</li>
+<li>quit 服务端收到这个命令后就会关闭连接</li>
+</ul>
+
+<p>具体的服务端代码如下所示:</p>
+
+<pre><code>    package main
+    
+    import (
+        &quot;fmt&quot;
+        &quot;net&quot;
+        &quot;strings&quot;
+    )
+    
+    func connHandler(c net.Conn) {
+        if c == nil {
+            return
+        }
+    
+        buf := make([]byte, 4096)
+    
+        for {
+            cnt, err := c.Read(buf)
+            if err != nil || cnt == 0 {
+                c.Close()
+                break
+            }
+    
+            inStr := strings.TrimSpace(string(buf[0:cnt]))
+    
+            inputs := strings.Split(inStr, &quot; &quot;)
+    
+            switch inputs[0] {
+            case &quot;ping&quot;:
+                c.Write([]byte(&quot;pong\n&quot;))
+            case &quot;echo&quot;:
+                echoStr := strings.Join(inputs[1:], &quot; &quot;) + &quot;\n&quot;
+                c.Write([]byte(echoStr))
+            case &quot;quit&quot;:
+                c.Close()
+                break
+            default:
+                fmt.Printf(&quot;Unsupported command: %s\n&quot;, inputs[0])
+            }
+        }
+    
+        fmt.Printf(&quot;Connection from %v closed. \n&quot;, c.RemoteAddr())
+    }
+    
+    func main() {
+        server, err := net.Listen(&quot;tcp&quot;, &quot;:1208&quot;)
+        if err != nil {
+            fmt.Printf(&quot;Fail to start server, %s\n&quot;, err)
+        }
+    
+        fmt.Println(&quot;Server Started ...&quot;)
+    
+        for {
+            conn, err := server.Accept()
+            if err != nil {
+                fmt.Printf(&quot;Fail to connect, %s\n&quot;, err)
+                break
+            }
+    
+            go connHandler(conn)
+        }
+    }
+</code></pre>
+
+<p>客户端的实现</p>
+
+<pre><code class="language-go">    package main
+    
+    import (
+        &quot;bufio&quot;
+        &quot;fmt&quot;
+        &quot;net&quot;
+        &quot;os&quot;
+        &quot;strings&quot;
+    )
+    
+    func connHandler(c net.Conn) {
+        defer c.Close()
+    
+        reader := bufio.NewReader(os.Stdin)
+        buf := make([]byte, 1024)
+    
+        for {
+            input, _ := reader.ReadString('\n')
+            input = strings.TrimSpace(input)
+    
+            if input == &quot;quit&quot; {
+                return
+            }
+    
+            c.Write([]byte(input))
+    
+            cnt, err := c.Read(buf)
+            if err != nil {
+                fmt.Printf(&quot;Fail to read data, %s\n&quot;, err)
+                continue
+            }
+    
+            fmt.Print(string(buf[0:cnt]))
+        }
+    }
+    
+    func main() {
+        conn, err := net.Dial(&quot;tcp&quot;, &quot;localhost:1208&quot;)
+        if err != nil {
+            fmt.Printf(&quot;Fail to connect, %s\n&quot;, err)
+            return
+        }
+    
+        connHandler(conn)
+    }
+    
+</code></pre>
+
+<h5 id="三-解决golang开发socket服务时粘包半包bug-http-xiaorui-cc-2016-03-08-解决golang开发socket服务时粘包半包bug">三、<a href="http://xiaorui.cc/2016/03/08/解决golang开发socket服务时粘包半包bug/" rel="nofollow noreferrer" target="_blank">解决golang开发socket服务时粘包半包bug</a></h5>
+
+<blockquote>
+<p>基础知识可以参考<a href="http://michaelyou.github.io/2015/03/13/tcp是流的一些思考-拆包和粘包/" rel="nofollow noreferrer" target="_blank">tcp是流的一些思考&ndash;拆包和粘包</a><br />
+tcp中有一个negal算法，用途是这样的：通信两端有很多小的数据包要发送，虽然传送的数据很少，但是流程一点没少，也需要tcp的各种确认，校验。这样小的数据包如果很多，会造成网络资源很大的浪费，negal算法做了这样一件事，当来了一个很小的数据包，我不急于发送这个包，而是等来了更多的包，将这些小包组合成大包之后一并发送，不就提高了网络传输的效率的嘛。这个想法收到了很好的效果，但是我们想一下，如果是分属于两个不同页面的包，被合并在了一起，那客户那边如何区分它们呢？<br />
+这就是粘包问题。从粘包问题我们更可以看出为什么tcp被称为流协议，因为它就跟水流一样，是没有边界的，没有消息的边界保护机制，所以tcp只有流的概念，没有包的概念。</p>
+</blockquote>
+
+<p>解决tcp粘包的方法:<br />
+客户端会定义一个标示，比如数据的前4位是数据的长度，后面才是数据。那么客户端只需发送 ( 数据长度+数据 ) 的格式数据就可以了，接收方根据包头信息里的数据长度读取buffer.<br />
+客户端:</p>
+
+<pre><code class="language-go">    //客户端发送封包
+    package main
+    
+    import (
+        &quot;fmt&quot;
+        &quot;math/rand&quot;
+        &quot;net&quot;
+        &quot;os&quot;
+        &quot;strconv&quot;
+        &quot;strings&quot;
+        &quot;time&quot;
+    )
+    
+    func main() {
+    
+        server := &quot;127.0.0.1:5000&quot;
+        tcpAddr, err := net.ResolveTCPAddr(&quot;tcp4&quot;, server)
+        if err != nil {
+            fmt.Fprintf(os.Stderr, &quot;Fatal error: %s&quot;, err.Error())
+            os.Exit(1)
+        }
+    
+        conn, err := net.DialTCP(&quot;tcp&quot;, nil, tcpAddr)
+        if err != nil {
+            fmt.Fprintf(os.Stderr, &quot;Fatal error: %s&quot;, err.Error())
+            os.Exit(1)
+        }
+    
+        defer conn.Close()
+    
+        for i := 0; i &lt; 50; i++ {
+            //msg := strconv.Itoa(i)
+            msg := RandString(i)
+            msgLen := fmt.Sprintf(&quot;%03s&quot;, strconv.Itoa(len(msg)))
+            //fmt.Println(msg, msgLen)
+            words := &quot;aaaa&quot; + msgLen + msg
+            //words := append([]byte(&quot;aaaa&quot;), []byte(msgLen), []byte(msg))
+            fmt.Println(len(words), words)
+            conn.Write([]byte(words))
+        }
+    }
+    
+    /**
+    *生成随机字符
+    **/
+    func RandString(length int) string {
+        rand.Seed(time.Now().UnixNano())
+        rs := make([]string, length)
+        for start := 0; start &lt; length; start++ {
+            t := rand.Intn(3)
+            if t == 0 {
+                rs = append(rs, strconv.Itoa(rand.Intn(10)))
+            } else if t == 1 {
+                rs = append(rs, string(rand.Intn(26)+65))
+            } else {
+                rs = append(rs, string(rand.Intn(26)+97))
+            }
+        }
+        return strings.Join(rs, &quot;&quot;)
+    }
+    
+</code></pre>
+
+<p>服务端实例代码:</p>
+
+<pre><code class="language-go">    package main
+    
+    import (
+        &quot;fmt&quot;
+        &quot;io&quot;
+        &quot;net&quot;
+        &quot;os&quot;
+        &quot;strconv&quot;
+    )
+    
+    func main() {
+        netListen, err := net.Listen(&quot;tcp&quot;, &quot;:5000&quot;)
+        CheckError(err)
+    
+        defer netListen.Close()
+    
+        for {
+            conn, err := netListen.Accept()
+            if err != nil {
+                continue
+            }
+    
+            go handleConnection(conn)
+        }
+    }
+    
+    func handleConnection(conn net.Conn) {
+        allbuf := make([]byte, 0)
+        buffer := make([]byte, 1024)
+        for {
+            readLen, err := conn.Read(buffer)
+            //fmt.Println(&quot;readLen: &quot;, readLen, len(allbuf))
+            if err == io.EOF {
+                break
+            }
+            if err != nil {
+                fmt.Println(&quot;read error&quot;)
+                return
+            }
+    
+            if len(allbuf) != 0 {
+                allbuf = append(allbuf, buffer...)
+            } else {
+                allbuf = buffer[:]
+            }
+            var readP int = 0
+            for {
+                //fmt.Println(&quot;allbuf content:&quot;, string(allbuf))
+    
+                //buffer长度小于7
+                if readLen-readP &lt; 7 {
+                    allbuf = buffer[readP:]
+                    break
+                }
+    
+                msgLen, _ := strconv.Atoi(string(allbuf[readP+4 : readP+7]))
+                logLen := 7 + msgLen
+                //fmt.Println(readP, readP+logLen)
+                //buffer剩余长度&gt;将处理的数据长度
+                if len(allbuf[readP:]) &gt;= logLen {
+                    //fmt.Println(string(allbuf[4:7]))
+                    fmt.Println(string(allbuf[readP : readP+logLen]))
+                    readP += logLen
+                    //fmt.Println(readP, readLen)
+                    if readP == readLen {
+                        allbuf = nil
+                        break
+                    }
+                } else {
+                    allbuf = buffer[readP:]
+                    break
+                }
+            }
+        }
+    }
+    
+    func CheckError(err error) {
+        if err != nil {
+            fmt.Fprintf(os.Stderr, &quot;Fatal error: %s&quot;, err.Error())
+            os.Exit(1)
+        }
+    }
+    
+</code></pre>
+
+<h5 id="四-io包的readfull">四、io包的ReadFull</h5>
+
+<p>对于第三部分的<a href="http://xiaorui.cc/2016/03/08/解决golang开发socket服务时粘包半包bug/" rel="nofollow noreferrer" target="_blank">解决golang开发socket服务时粘包半包bug</a>，有作者认为太复杂了，参见<a href="https://moonshining.github.io/2018/02/05/golang-tcp拆包的正确姿势/" rel="nofollow noreferrer" target="_blank">golang tcp拆包的正确姿势</a>，他提出可以用ReadFull来简化。</p>
+
+<p>关于io包基础知识，参考<a href="https://www.jianshu.com/p/6bda40d003b4" rel="nofollow noreferrer" target="_blank">Golang io reader writer</a><br />
+关于ReadFull，可以参考达达的博客系列：<br />
+<a href="https://zhuanlan.zhihu.com/p/21360811" rel="nofollow noreferrer" target="_blank">Go语言小贴士1 － io包</a><br />
+<a href="https://zhuanlan.zhihu.com/p/21367696" rel="nofollow noreferrer" target="_blank">Go语言小贴士2 － 协议解析</a><br />
+<a href="https://zhuanlan.zhihu.com/p/21369473" rel="nofollow noreferrer" target="_blank">Go语言小贴士3 － bufio包</a></p>
+
+<p>原文不再转述，现在引用一下重点：</p>
+
+<p><code>io.Reader</code>的定义如下：</p>
+
+<pre><code class="language-go">    type Reader interface {
+            Read(p []byte) (n int, err error)
+    }
+</code></pre>
+
+<p>其中文档的说明非常重要，文档中详细描述了<code>Read</code>方法的各种返回可能性。</p>
+
+<p>文档描述中有一个要点，就是<code>n</code>可能小于等于<code>len(p)</code>，也就是说Go在读IO的时候，是不会保证一次读取预期的所有数据的。如果我们要确保一次读取我们所需的所有数据，就需要在一个循环里调用<code>Read</code>，累加每次返回的<code>n</code>并小心设置下次<code>Read</code>时<code>p</code>的偏移量，直到<code>n</code>的累加值达到我们的预期。</p>
+
+<p>因为上述需求实在太常见了，所以Go在io包中提供了一个<code>ReadFull</code>函数来做到一次读取要求的所有数据，通过阅读<code>ReadFull</code>函数的代码，也可以反过来帮助大家理解<code>io.Reader</code>是怎么运作的。</p>
+
+<pre><code class="language-go">    //io.go源码
+    func ReadFull(r Reader, buf []byte) (n int, err error) {
+        return ReadAtLeast(r, buf, len(buf))
+    }
+    
+    func ReadAtLeast(r Reader, buf []byte, min int) (n int, err error) {
+        if len(buf) &lt; min {
+            return 0, ErrShortBuffer
+        }
+        for n &lt; min &amp;&amp; err == nil {
+            var nn int
+            nn, err = r.Read(buf[n:])
+            n += nn
+        }
+        if n &gt;= min {
+            err = nil
+        } else if n &gt; 0 &amp;&amp; err == EOF {
+            err = ErrUnexpectedEOF
+        }
+        return
+    }
+</code></pre>
+
+<p>在很多应用场景中，消息包的长度是不固定的，就像上面的字符串字段一样。我们一样可以用开头固定的几个字节来存放消息长度，在解析通讯协议的时候就可以从字节流中截出一个个的消息包了，这样的操作通常叫做协议分包或者粘包处理。<br />
+贴个从Socket读取消息包的伪代码（没编译）：</p>
+
+<pre><code class="language-go">    func ReadPacket(conn net.Conn) ([]byte, error) {
+            var head [2]byte
+    
+            if _, err := io.ReadFull(conn, head[:]); err != nil {
+                    return err
+            }
+    
+            size := binary.BigEndian.Uint16(head)
+            packet := make([]byte, size)
+    
+            if _, err := io.ReadFull(conn, packet); err != nil {
+                    return err
+            }
+    
+            return packet
+    }
+</code></pre>
+
+<p>上面的代码就用到了前一个小贴士中说到的<code>io.ReadFull</code>来确保一次读取完整数据。</p>
+
+<p>要注意，这段代码不是线程安全的，如果有两个线程同时对一个<code>net.Conn</code>进行<code>ReadPacket</code>操作，很可能会发生严重错误，具体逻辑请自行分析。</p>
+
+<p>从上面结构体序列化和反序列化的代码中，大家不难看出，实现一个二进制协议是挺繁琐和容易出BUG的，只要稍微有一个数值计算错就解析出错了。所以在工程实践中，不推荐大家手写二进制协议的解析代码，项目中通常会用自动化的工具来辅助生成代码。</p>
+
+<p>在<a href="https://github.com/name5566/leaf/blob/master/TUTORIAL_ZH.md" rel="nofollow noreferrer" target="_blank">Leaf 游戏服务器框架简介</a>的tcp_msg.go中，Read方法也使用了ReadFull这种方式来处理。</p>
+
+<h5 id="五-websocket">五、WebSocket</h5>
+
+<p>参考<a href="https://yuerblog.cc/2017/11/06/golang-websocket/" rel="nofollow noreferrer" target="_blank">封装golang websocket</a><br />
+websocket是个二进制协议，需要先通过Http协议进行握手，从而协商完成从Http协议向websocket协议的转换。一旦握手结束，当前的TCP连接后续将采用二进制websocket协议进行双向双工交互，自此与Http协议无关。</p>
+
+<p>可以通过这篇知乎了解一下websocket协议的基本原理：<a href="https://www.zhihu.com/question/20215561" rel="nofollow noreferrer" target="_blank">《WebSocket 是什么原理？为什么可以实现持久连接？》</a>。</p>
+
+<h6 id="1-粘包">1.粘包</h6>
+
+<p>我们开发过TCP服务的都知道，需要通过协议decode从TCP字节流中解析出一个一个请求，那么websocket又怎么样呢？</p>
+
+<p>websocket以message为单位进行通讯，本身就是一个在TCP层上的一个分包协议，其实并不需要我们再进行粘包处理。但是因为单个message可能很大很大（比如一个视频文件），那么websocket显然不适合把一个视频作为一个message传输（中途断了前功尽弃），所以websocket协议其实是支持1个message分多个frame帧传输的。</p>
+
+<p>我们的浏览器提供的编程API都是message粒度的，把frame拆帧的细节对开发者隐蔽了，而服务端websocket框架一般也做了同样的隐藏，会自动帮我们收集所有的frame后拼成messasge再回调，所以结论就是：</p>
+
+<p><strong>websocket以message为单位通讯，不需要开发者自己处理粘包问题。</strong></p>
+
+<p>更多参考<a href="https://www.zhihu.com/question/29916578" rel="nofollow noreferrer" target="_blank">Websocket需要像TCP Socket那样进行逻辑数据包的分包与合包吗?</a></p>
+
+<h6 id="2-golang实现">2.golang实现</h6>
+
+<p>golang官方标准库里有一个websocket的包，但是它提供的就是frame粒度的API，压根不能用。</p>
+
+<p>不过官方其实已经认可了一个准标准库实现，它实现了message粒度的API，让开发者不需要关心websocket协议细节，开发起来非常方便，其文档地址：<a href="https://godoc.org/github.com/gorilla/websocket" rel="nofollow noreferrer" target="_blank">https://godoc.org/github.com/gorilla/websocket</a>。</p>
+
+<p>开发websocket服务时，首先要基于http库对外暴露接口，然后由websocket库接管TCP连接进行协议升级，然后进行websocket协议的数据交换，所以开发时总是要用到http库和websocket库。</p>
+
+<p>上述websocket文档中对开发websocket服务有明确的注意事项要求，主要是指：</p>
+
+<ul>
+<li>读和写API不是并发安全的，需要启动单个goroutine串行处理。</li>
+<li>关闭API是线程安全的，一旦调用则阻塞的读和写API会出错返回，从而终止处理。</li>
+</ul>
+
+<h6 id="六-心跳实现">六、心跳实现</h6>
+
+<p><a href="https://www.yuque.com/docs/share/ef732d9e-f488-4e7e-8d64-43a1c18872ea" rel="nofollow noreferrer" target="_blank">Golang 心跳的实现</a><br />
+在多客户端同时访问服务器的工作模式下，首先要保证服务器的运行正常。因此，Server和Client建立通讯后，确保连接的及时断开就非常重要。否则，多个客户端长时间占用着连接不关闭，是非常可怕的服务器资源浪费。会使得服务器可服务的客户端数量大幅度减少。因此，针对短链接和长连接，根据业务的需求，配套不同的处理机制。</p>
+
+<ul>
+<li>短连接：一般建立完连接，就立刻传输数据。传输完数据，连接就关闭。服务端根据需要，设定连接的时长。超过时间长度，就算客户端超时。立刻关闭连接。</li>
+<li>长连接：建立连接后，传输数据，然后要保持连接，然后再次传输数据。直到连接关闭。</li>
+</ul>
+
+<p>socket读写可以通过 SetDeadline、SetReadDeadline、SetWriteDeadline设置阻塞的时间。</p>
+
+<pre><code class="language-go">    func (*IPConn) SetDeadline  
+    func (c *IPConn) SetDeadline(t time.Time) error  
+    
+    func (*IPConn) SetReadDeadline  
+    func (c *IPConn) SetReadDeadline(t time.Time) error  
+    
+    func (*IPConn) SetWriteDeadline 
+    func (c *IPConn) SetWriteDeadline(t time.Time) error
+</code></pre>
+
+<p>如果做短连接，直接在Server端的连接上设置SetReadDeadline。当你设置的时限到达，无论客户端是否还在继续传递消息，服务端都不会再接收。并且已经关闭连接。</p>
+
+<pre><code class="language-go">    func main() {
+        server := &quot;:7373&quot;
+        netListen, err := net.Listen(&quot;tcp&quot;, server)
+        if err != nil{
+            Log(&quot;connect error: &quot;, err)
+            os.Exit(1)
+        }
+        Log(&quot;Waiting for Client ...&quot;)
+        for{
+            conn, err := netListen.Accept()
+            if err != nil{
+                Log(conn.RemoteAddr().String(), &quot;Fatal error: &quot;, err)
+                continue
+            }
+    
+            //设置短连接(10秒)
+            conn.SetReadDeadline(time.Now().Add(time.Duration(10)*time.Second))
+    
+            Log(conn.RemoteAddr().String(), &quot;connect success!&quot;)
+            ...
+        }
+    }
+    
+</code></pre>
+
+<p>这就可以了。在这段代码中，每当10秒中的时限一道，连接就终止了。</p>
+
+<p>根据业务需要，客户端可能需要长时间保持连接。但是服务端不能无限制的保持。这就需要一个机制，如果超过某个时间长度，服务端没有获得客户端的数据，就判定客户端已经不需要连接了（比如客户端挂掉了）。做到这个，需要一个心跳机制。在限定的时间内，客户端给服务端发送一个指定的消息，以便服务端知道客户端还活着。</p>
+
+<pre><code class="language-go">    func sender(conn *net.TCPConn) {
+        for i := 0; i &lt; 10; i++{
+            words := strconv.Itoa(i)+&quot; Hello I'm MyHeartbeat Client.&quot;
+            msg, err := conn.Write([]byte(words))
+            if err != nil {
+                Log(conn.RemoteAddr().String(), &quot;Fatal error: &quot;, err)
+                os.Exit(1)
+            }
+            Log(&quot;服务端接收了&quot;, msg)
+            time.Sleep(2 * time.Second)
+        }
+        for i := 0; i &lt; 2 ; i++ {
+            time.Sleep(12 * time.Second)
+        }
+        for i := 0; i &lt; 10; i++{
+            words := strconv.Itoa(i)+&quot; Hi I'm MyHeartbeat Client.&quot;
+            msg, err := conn.Write([]byte(words))
+            if err != nil {
+                Log(conn.RemoteAddr().String(), &quot;Fatal error: &quot;, err)
+                os.Exit(1)
+            }
+            Log(&quot;服务端接收了&quot;, msg)
+            time.Sleep(2 * time.Second)
+        }
+    
+    }
+</code></pre>
+
+<p>这段客户端代码，实现了两个相同的信息发送频率给服务端。两个频率中间，我们让运行休息了12秒。然后，我们在服务端的对应机制是这样的。</p>
+
+<pre><code class="language-go">    func HeartBeating(conn net.Conn, bytes chan byte, timeout int) {
+        select {
+        case fk := &lt;- bytes:
+            Log(conn.RemoteAddr().String(), &quot;心跳:第&quot;, string(fk), &quot;times&quot;)
+            conn.SetDeadline(time.Now().Add(time.Duration(timeout) * time.Second))
+            break
+    
+            case &lt;- time.After(5 * time.Second):
+                Log(&quot;conn dead now&quot;)
+                conn.Close()
+        }
+    }
+    
+</code></pre>
+
+<p>每次接收到心跳数据就 SetDeadline 延长一个时间段 timeout。如果没有接到心跳数据，5秒后连接关闭。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>itstudying.lijq </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://blog.itstudying.com/2019/golang_socket_websocket/>https://blog.itstudying.com/2019/golang_socket_websocket/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/golang/">
+                    #golang</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/socket/">
+                    #socket</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/websocket/">
+                    #websocket</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/tcp/">
+                    #tcp</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://blog.itstudying.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" class="prev" rel="prev" title="jenkins 跨机房自动部署方案"><i class="iconfont icon-left"></i>&nbsp;jenkins 跨机房自动部署方案</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2015 - 2019</span>
+        
+        <span class="with-love">
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://blog.itstudying.com">itstudying.lijq</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">皖ICP备16024028号-2 </a> |
+         
+		  <span>本博客由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a> 强力驱动</span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+     </div>
+  </body>
+</html>
