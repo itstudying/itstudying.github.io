@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="itstudying.lijq">
+  <meta name="description" content="Go语言,Golang开发,gopher,itstudying,李俊奇的个人主页. good good study,day day up.">
+  <meta name="keywords" content="itstudying, 个人主页, home, gopher, 李俊奇, 李俊奇的小站, 0.0">
+  
+  <link rel="prev" href="https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/" />
+  <link rel="next" href="https://blog.itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" />
+  <link rel="canonical" href="https://blog.itstudying.com/2019/centos%E9%85%8D%E7%BD%AEshadowsocks/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Centos 配置 shadowsocks客户端 | itstudying
+       
+  </title>
+  <meta name="title" content="Centos 配置 shadowsocks客户端 | itstudying">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+ 
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.itstudying.com"
+    },
+    "articleSection" : "posts",
+    "name" : "Centos 配置 shadowsocks客户端",
+    "headline" : "Centos 配置 shadowsocks客户端",
+    "description" : "Centos 配置shadowsocks客户端  最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务\n shadowsocks客户端  安装pip\nyum install python-setuptools \x26amp;\x26amp; easy_install pip  安装shadowsocks客户端\npip install git\x2bhttps:\/\/github.com\/shadowsocks\/shadowsocks.git@master  配置文件\n  新建配置文件 \/etc\/shadowsocks.json\n{ \x26quot;server\x26quot;:\x26quot;服务器 IP 或是域名\x26quot;, \x26quot;server_port\x26quot;:端口号, \x26quot;local_address\x26quot;: \x26quot;127.0.0.1\x26quot;, \x26quot;local_port\x26quot;:1080, \x26quot;password\x26quot;:\x26quot;密码\x26quot;, \x26quot;timeout\x26quot;:300, \x26quot;method\x26quot;:\x26quot;加密方式 (chacha20-ietf-poly1305 \/ aes-256-cfb)\x26quot;, \x26quot;fast_open\x26quot;: false }   如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。\n 首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 参考教程：\necho 3 \x26gt; \/proc\/sys\/net\/ipv4\/tcp_fastopen   启动 ss客户端名字为sslocal，如果找不到可执行命令whereis sslocal查看程序安装目录\n后台启动客户端 \/usr\/bin\/sslocal -c \/etc\/shadowsocks.json -d start   systemctl 管理服务 systemd的所有可用的单元文件存放在 \/usr\/lib\/systemd\/system\/ 和 \/etc\/systemd\/system\/ 目录，后者优先级更高 1.",
+    "inLanguage" : "en-us",
+    "author" : "itstudying",
+    "creator" : "itstudying",
+    "publisher": "itstudying",
+    "accountablePerson" : "itstudying",
+    "copyrightHolder" : "itstudying",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-09-12 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-09-12 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.itstudying.com\/2019\/centos%E9%85%8D%E7%BD%AEshadowsocks\/",
+    "wordCount" : "93",
+    "keywords" : [ "linux","shadowsocks", "itstudying"]
+}
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146687653-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-146687653-3');
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class=""></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Centos 配置 shadowsocks客户端</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://blog.itstudying.com" rel="author">itstudying</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-09-12 itemprop="datePublished">September 12, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://blog.itstudying.com/categories/%E5%B7%A5%E5%85%B7/"> 工具 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h1 id="centos-配置shadowsocks客户端">Centos 配置shadowsocks客户端</h1>
+
+<blockquote>
+<p>最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务</p>
+</blockquote>
+
+<h2 id="shadowsocks客户端">shadowsocks客户端</h2>
+
+<ol>
+<li><p>安装pip</p>
+
+<pre><code class="language-go">yum install python-setuptools &amp;&amp; easy_install pip
+</code></pre></li>
+
+<li><p>安装shadowsocks客户端</p>
+
+<pre><code class="language-go">pip install git+https://github.com/shadowsocks/shadowsocks.git@master
+</code></pre></li>
+
+<li><p>配置文件</p></li>
+</ol>
+
+<p>新建配置文件 <code>/etc/shadowsocks.json</code></p>
+
+<pre><code class="language-go">{
+    &quot;server&quot;:&quot;服务器 IP 或是域名&quot;,
+    &quot;server_port&quot;:端口号,
+    &quot;local_address&quot;: &quot;127.0.0.1&quot;,
+    &quot;local_port&quot;:1080,
+    &quot;password&quot;:&quot;密码&quot;,
+    &quot;timeout&quot;:300,
+    &quot;method&quot;:&quot;加密方式 (chacha20-ietf-poly1305 / aes-256-cfb)&quot;,
+    &quot;fast_open&quot;: false
+}
+</code></pre>
+
+<blockquote>
+<p>如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。</p>
+</blockquote>
+
+<p>首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 <a href="https://github.com/shadowsocks/shadowsocks/wiki/TCP-Fast-Open" rel="nofollow noreferrer" target="_blank">参考教程</a>：</p>
+
+<pre><code class="language-go">echo 3 &gt; /proc/sys/net/ipv4/tcp_fastopen
+</code></pre>
+
+<ol>
+<li><p>启动
+ss客户端名字为<code>sslocal</code>，如果找不到可执行命令<code>whereis sslocal</code>查看程序安装目录</p>
+
+<pre><code class="language-go">后台启动客户端
+/usr/bin/sslocal -c /etc/shadowsocks.json -d start
+</code></pre></li>
+</ol>
+
+<h2 id="systemctl-管理服务">systemctl 管理服务</h2>
+
+<p>systemd的所有可用的单元文件存放在 <code>/usr/lib/systemd/system/</code> 和 <code>/etc/systemd/system/</code> 目录，后者优先级更高
+1. 创建配置文件</p>
+
+<pre><code class="language-go">vim /etc/systemd/system/shadowsocks.service
+
+[Unit]
+Description=Shadowsocks Client Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/sslocal -c /etc/shadowsocks.json start
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<p><strong>注意ExecStart后不能加-d</strong>
+2. 用systemctl管理服务</p>
+
+<pre><code class="language-go">systemctl start shadowsocks
+systemctl stop shadowsocks
+systemctl status shadowsocks
+</code></pre>
+
+<ol>
+<li><p>开机自启动</p>
+
+<pre><code class="language-go">systemctl enable shadowsocks
+</code></pre></li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>itstudying.lijq </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://blog.itstudying.com/2019/centos%E9%85%8D%E7%BD%AEshadowsocks/>https://blog.itstudying.com/2019/centos%E9%85%8D%E7%BD%AEshadowsocks/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/linux/">
+                    #linux</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/shadowsocks/">
+                    #shadowsocks</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://blog.itstudying.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/" class="prev" rel="prev" title="gomod交叉编译cannot find module for path…"><i class="iconfont icon-left"></i>&nbsp;gomod交叉编译cannot find module for path…</a>
+         
+        
+        <a href="https://blog.itstudying.com/2019/jenkins%E8%B7%A8%E6%9C%BA%E6%88%BF%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/" class="next" rel="next" title="jenkins 跨机房自动部署方案">jenkins 跨机房自动部署方案&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2015 - 2019</span>
+        
+        <span class="with-love">
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://blog.itstudying.com">itstudying.lijq</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">皖ICP备16024028号-2 </a> |
+         
+		  <span>本博客由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a> 强力驱动</span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+     </div>
+  </body>
+</html>
