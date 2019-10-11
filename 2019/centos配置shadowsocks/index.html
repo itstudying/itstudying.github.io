@@ -45,7 +45,7 @@
     "articleSection" : "posts",
     "name" : "Centos 配置 shadowsocks客户端",
     "headline" : "Centos 配置 shadowsocks客户端",
-    "description" : "Centos 配置shadowsocks客户端  最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务\n shadowsocks客户端  安装pip\nyum install python-setuptools \x26amp;\x26amp; easy_install pip  安装shadowsocks客户端\npip install git\x2bhttps:\/\/github.com\/shadowsocks\/shadowsocks.git@master  配置文件\n  新建配置文件 \/etc\/shadowsocks.json\n{ \x26quot;server\x26quot;:\x26quot;服务器 IP 或是域名\x26quot;, \x26quot;server_port\x26quot;:端口号, \x26quot;local_address\x26quot;: \x26quot;127.0.0.1\x26quot;, \x26quot;local_port\x26quot;:1080, \x26quot;password\x26quot;:\x26quot;密码\x26quot;, \x26quot;timeout\x26quot;:300, \x26quot;method\x26quot;:\x26quot;加密方式 (chacha20-ietf-poly1305 \/ aes-256-cfb)\x26quot;, \x26quot;fast_open\x26quot;: false }   如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。\n 首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 参考教程：\necho 3 \x26gt; \/proc\/sys\/net\/ipv4\/tcp_fastopen   启动 ss客户端名字为sslocal，如果找不到可执行命令whereis sslocal查看程序安装目录\n后台启动客户端 \/usr\/bin\/sslocal -c \/etc\/shadowsocks.json -d start   systemctl 管理服务 systemd的所有可用的单元文件存放在 \/usr\/lib\/systemd\/system\/ 和 \/etc\/systemd\/system\/ 目录，后者优先级更高 1.",
+    "description" : "最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务\n shadowsocks客户端  安装pip\nyum install python-setuptools \x26amp;\x26amp; easy_install pip  安装shadowsocks客户端\npip install git\x2bhttps:\/\/github.com\/shadowsocks\/shadowsocks.git@master  配置文件 新建配置文件 \/etc\/shadowsocks.json\n{ \x26quot;server\x26quot;:\x26quot;服务器 IP 或是域名\x26quot;, \x26quot;server_port\x26quot;:端口号, \x26quot;local_address\x26quot;: \x26quot;127.0.0.1\x26quot;, \x26quot;local_port\x26quot;:1080, \x26quot;password\x26quot;:\x26quot;密码\x26quot;, \x26quot;timeout\x26quot;:300, \x26quot;method\x26quot;:\x26quot;加密方式 (chacha20-ietf-poly1305 \/ aes-256-cfb)\x26quot;, \x26quot;fast_open\x26quot;: false }  fast_open 如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 参考教程：\necho 3 \x26gt; \/proc\/sys\/net\/ipv4\/tcp_fastopen  启动 ss客户端名字为sslocal，如果找不到可执行命令whereis sslocal查看程序安装目录\n后台启动客户端 \/usr\/bin\/sslocal -c \/etc\/shadowsocks.json -d start   systemctl 管理服务 systemd的所有可用的单元文件存放在 \/usr\/lib\/systemd\/system\/ 和 \/etc\/systemd\/system\/ 目录，后者优先级更高 1. 创建配置文件\nvim \/etc\/systemd\/system\/shadowsocks.",
     "inLanguage" : "en-us",
     "author" : "itstudying",
     "creator" : "itstudying",
@@ -56,7 +56,7 @@
     "datePublished": "2019-09-12 00:00:00 \x2b0000 UTC",
     "dateModified" : "2019-09-12 00:00:00 \x2b0000 UTC",
     "url" : "https:\/\/blog.itstudying.com\/2019\/centos%E9%85%8D%E7%BD%AEshadowsocks\/",
-    "wordCount" : "93",
+    "wordCount" : "90",
     "keywords" : [ "linux","shadowsocks", "itstudying"]
 }
 </script>
@@ -158,8 +158,6 @@
 
           
 
-<h1 id="centos-配置shadowsocks客户端">Centos 配置shadowsocks客户端</h1>
-
 <blockquote>
 <p>最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务</p>
 </blockquote>
@@ -177,33 +175,27 @@
 <pre><code class="language-go">pip install git+https://github.com/shadowsocks/shadowsocks.git@master
 </code></pre></li>
 
-<li><p>配置文件</p></li>
-</ol>
-
-<p>新建配置文件 <code>/etc/shadowsocks.json</code></p>
+<li><p>配置文件
+新建配置文件 <code>/etc/shadowsocks.json</code></p>
 
 <pre><code class="language-go">{
-    &quot;server&quot;:&quot;服务器 IP 或是域名&quot;,
-    &quot;server_port&quot;:端口号,
-    &quot;local_address&quot;: &quot;127.0.0.1&quot;,
-    &quot;local_port&quot;:1080,
-    &quot;password&quot;:&quot;密码&quot;,
-    &quot;timeout&quot;:300,
-    &quot;method&quot;:&quot;加密方式 (chacha20-ietf-poly1305 / aes-256-cfb)&quot;,
-    &quot;fast_open&quot;: false
+&quot;server&quot;:&quot;服务器 IP 或是域名&quot;,
+&quot;server_port&quot;:端口号,
+&quot;local_address&quot;: &quot;127.0.0.1&quot;,
+&quot;local_port&quot;:1080,
+&quot;password&quot;:&quot;密码&quot;,
+&quot;timeout&quot;:300,
+&quot;method&quot;:&quot;加密方式 (chacha20-ietf-poly1305 / aes-256-cfb)&quot;,
+&quot;fast_open&quot;: false
 }
-</code></pre>
+</code></pre></li>
 
-<blockquote>
-<p>如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。</p>
-</blockquote>
-
-<p>首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 <a href="https://github.com/shadowsocks/shadowsocks/wiki/TCP-Fast-Open" rel="nofollow noreferrer" target="_blank">参考教程</a>：</p>
+<li><p>fast_open
+如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 <a href="https://github.com/shadowsocks/shadowsocks/wiki/TCP-Fast-Open" rel="nofollow noreferrer" target="_blank">参考教程</a>：</p>
 
 <pre><code class="language-go">echo 3 &gt; /proc/sys/net/ipv4/tcp_fastopen
-</code></pre>
+</code></pre></li>
 
-<ol>
 <li><p>启动
 ss客户端名字为<code>sslocal</code>，如果找不到可执行命令<code>whereis sslocal</code>查看程序安装目录</p>
 
@@ -232,15 +224,16 @@ ExecStart=/usr/bin/sslocal -c /etc/shadowsocks.json start
 WantedBy=multi-user.target
 </code></pre>
 
-<p><strong>注意ExecStart后不能加-d</strong>
-2. 用systemctl管理服务</p>
+<p><strong>注意ExecStart后不能加-d</strong></p>
+
+<ol>
+<li><p>用systemctl管理服务</p>
 
 <pre><code class="language-go">systemctl start shadowsocks
 systemctl stop shadowsocks
 systemctl status shadowsocks
-</code></pre>
+</code></pre></li>
 
-<ol>
 <li><p>开机自启动</p>
 
 <pre><code class="language-go">systemctl enable shadowsocks

@@ -48,15 +48,14 @@ config.toml main   新建两个辅助部署脚本deploy.sh和重启脚本restart
       <pubDate>Thu, 12 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://blog.itstudying.com/2019/centos%E9%85%8D%E7%BD%AEshadowsocks/</guid>
-      <description>Centos 配置shadowsocks客户端  最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务
+      <description>最近把系统换成了centos，第一步肯定是科学上网啦，so配置一下以及使用systemctl管理服务
  shadowsocks客户端  安装pip
 yum install python-setuptools &amp;amp;&amp;amp; easy_install pip  安装shadowsocks客户端
-pip install git+https://github.com/shadowsocks/shadowsocks.git@master  配置文件
-  新建配置文件 /etc/shadowsocks.json
-{ &amp;quot;server&amp;quot;:&amp;quot;服务器 IP 或是域名&amp;quot;, &amp;quot;server_port&amp;quot;:端口号, &amp;quot;local_address&amp;quot;: &amp;quot;127.0.0.1&amp;quot;, &amp;quot;local_port&amp;quot;:1080, &amp;quot;password&amp;quot;:&amp;quot;密码&amp;quot;, &amp;quot;timeout&amp;quot;:300, &amp;quot;method&amp;quot;:&amp;quot;加密方式 (chacha20-ietf-poly1305 / aes-256-cfb)&amp;quot;, &amp;quot;fast_open&amp;quot;: false }   如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。
- 首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 参考教程：
-echo 3 &amp;gt; /proc/sys/net/ipv4/tcp_fastopen   启动 ss客户端名字为sslocal，如果找不到可执行命令whereis sslocal查看程序安装目录
-后台启动客户端 /usr/bin/sslocal -c /etc/shadowsocks.json -d start   systemctl 管理服务 systemd的所有可用的单元文件存放在 /usr/lib/systemd/system/ 和 /etc/systemd/system/ 目录，后者优先级更高 1.</description>
+pip install git+https://github.com/shadowsocks/shadowsocks.git@master  配置文件 新建配置文件 /etc/shadowsocks.json
+{ &amp;quot;server&amp;quot;:&amp;quot;服务器 IP 或是域名&amp;quot;, &amp;quot;server_port&amp;quot;:端口号, &amp;quot;local_address&amp;quot;: &amp;quot;127.0.0.1&amp;quot;, &amp;quot;local_port&amp;quot;:1080, &amp;quot;password&amp;quot;:&amp;quot;密码&amp;quot;, &amp;quot;timeout&amp;quot;:300, &amp;quot;method&amp;quot;:&amp;quot;加密方式 (chacha20-ietf-poly1305 / aes-256-cfb)&amp;quot;, &amp;quot;fast_open&amp;quot;: false }  fast_open 如果服务器和客户端都部署在Linux 3.7.1或更高版本上，则可以打开fast_open以降低延迟（需要服务端支持）。首先在config.json中设置fast_open为true。然后暂时在操作系统上打开快速打开 参考教程：
+echo 3 &amp;gt; /proc/sys/net/ipv4/tcp_fastopen  启动 ss客户端名字为sslocal，如果找不到可执行命令whereis sslocal查看程序安装目录
+后台启动客户端 /usr/bin/sslocal -c /etc/shadowsocks.json -d start   systemctl 管理服务 systemd的所有可用的单元文件存放在 /usr/lib/systemd/system/ 和 /etc/systemd/system/ 目录，后者优先级更高 1. 创建配置文件
+vim /etc/systemd/system/shadowsocks.</description>
     </item>
     
     <item>
