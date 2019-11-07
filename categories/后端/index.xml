@@ -6,10 +6,19 @@
     <description>Recent content in 后端 on itstudying</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 07 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>mongo中根据数组匹配（$elemMatch）时索引的建立</title>
+      <link>https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/</link>
+      <pubDate>Thu, 07 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/</guid>
+      <description>mongo中根据数组匹配（$elemMatch）时索引的建立 表数据大小 godset:PRIMARY&amp;gt; db.billboards.find().count() 104022  文档结构 { &amp;quot;_id&amp;quot; : &amp;quot;603823.SS-2017-01-05-有价格涨跌幅限制的日换手率达到20%&amp;quot;, &amp;quot;buy&amp;quot; : [ { &amp;quot;buy_amount&amp;quot; : 2367.05, &amp;quot;net_amount&amp;quot; : 2367.05, &amp;quot;buy_ratio&amp;quot; : 1.91, &amp;quot;sales_department&amp;quot; : &amp;quot;中信建投证券股份有限公司北京朝外大街证券营业部&amp;quot;, &amp;quot;rank_tags&amp;quot; : [ ] }, { &amp;quot;buy_amount&amp;quot; : 2203.37, &amp;quot;net_amount&amp;quot; : 2203.37, &amp;quot;buy_ratio&amp;quot; : 1.78, &amp;quot;sales_department&amp;quot; : &amp;quot;国泰君安证券股份有限公司上海江苏路证券营业部&amp;quot;, &amp;quot;rank_tags&amp;quot; : [ ] }, { &amp;quot;buy_amount&amp;quot; : 2110.2, &amp;quot;net_amount&amp;quot; : 2110.2, &amp;quot;buy_ratio&amp;quot; : 1.7, &amp;quot;sales_department&amp;quot; : &amp;quot;机构专用&amp;quot;, &amp;quot;rank_tags&amp;quot; : [ ] }, { &amp;quot;buy_amount&amp;quot; : 1134.</description>
+    </item>
     
     <item>
       <title>Golang socket websocket</title>

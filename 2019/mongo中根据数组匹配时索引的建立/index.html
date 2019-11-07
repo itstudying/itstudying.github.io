@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="itstudying.lijq">
+  <meta name="description" content="Go语言,Golang开发,gopher,itstudying,李俊奇的个人主页. good good study,day day up.">
+  <meta name="keywords" content="itstudying, 个人主页, home, gopher, 李俊奇, 李俊奇的小站, 0.0">
+  
+  <link rel="prev" href="https://blog.itstudying.com/2019/golang_socket_websocket/" />
+  
+  <link rel="canonical" href="https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           mongo中根据数组匹配（$elemMatch）时索引的建立 | itstudying
+       
+  </title>
+  <meta name="title" content="mongo中根据数组匹配（$elemMatch）时索引的建立 | itstudying">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+ 
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.itstudying.com"
+    },
+    "articleSection" : "posts",
+    "name" : "mongo中根据数组匹配（$elemMatch）时索引的建立",
+    "headline" : "mongo中根据数组匹配（$elemMatch）时索引的建立",
+    "description" : "mongo中根据数组匹配（$elemMatch）时索引的建立 表数据大小 godset:PRIMARY\x26gt; db.billboards.find().count() 104022  文档结构 { \x26quot;_id\x26quot; : \x26quot;603823.SS-2017-01-05-有价格涨跌幅限制的日换手率达到20%\x26quot;, \x26quot;buy\x26quot; : [ { \x26quot;buy_amount\x26quot; : 2367.05, \x26quot;net_amount\x26quot; : 2367.05, \x26quot;buy_ratio\x26quot; : 1.91, \x26quot;sales_department\x26quot; : \x26quot;中信建投证券股份有限公司北京朝外大街证券营业部\x26quot;, \x26quot;rank_tags\x26quot; : [ ] }, { \x26quot;buy_amount\x26quot; : 2203.37, \x26quot;net_amount\x26quot; : 2203.37, \x26quot;buy_ratio\x26quot; : 1.78, \x26quot;sales_department\x26quot; : \x26quot;国泰君安证券股份有限公司上海江苏路证券营业部\x26quot;, \x26quot;rank_tags\x26quot; : [ ] }, { \x26quot;buy_amount\x26quot; : 2110.2, \x26quot;net_amount\x26quot; : 2110.2, \x26quot;buy_ratio\x26quot; : 1.7, \x26quot;sales_department\x26quot; : \x26quot;机构专用\x26quot;, \x26quot;rank_tags\x26quot; : [ ] }, { \x26quot;buy_amount\x26quot; : 1134.",
+    "inLanguage" : "en-us",
+    "author" : "itstudying",
+    "creator" : "itstudying",
+    "publisher": "itstudying",
+    "accountablePerson" : "itstudying",
+    "copyrightHolder" : "itstudying",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-11-07 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-11-07 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.itstudying.com\/2019\/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B\/",
+    "wordCount" : "763",
+    "keywords" : [ "mongo", "itstudying"]
+}
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146687653-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-146687653-3');
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class=""></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">mongo中根据数组匹配（$elemMatch）时索引的建立</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://blog.itstudying.com" rel="author">itstudying</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-11-07 itemprop="datePublished">November 7, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/"> 后端 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h2 id="mongo中根据数组匹配-elemmatch-时索引的建立">mongo中根据数组匹配（$elemMatch）时索引的建立</h2>
+
+<h3 id="表数据大小">表数据大小</h3>
+
+<pre><code class="language-go">godset:PRIMARY&gt; db.billboards.find().count()
+104022
+</code></pre>
+
+<h3 id="文档结构">文档结构</h3>
+
+<pre><code class="language-json">{
+	&quot;_id&quot; : &quot;603823.SS-2017-01-05-有价格涨跌幅限制的日换手率达到20%&quot;,
+	&quot;buy&quot; : [
+		{
+			&quot;buy_amount&quot; : 2367.05,
+			&quot;net_amount&quot; : 2367.05,
+			&quot;buy_ratio&quot; : 1.91,
+			&quot;sales_department&quot; : &quot;中信建投证券股份有限公司北京朝外大街证券营业部&quot;,
+			&quot;rank_tags&quot; : [ ]
+		},
+		{
+			&quot;buy_amount&quot; : 2203.37,
+			&quot;net_amount&quot; : 2203.37,
+			&quot;buy_ratio&quot; : 1.78,
+			&quot;sales_department&quot; : &quot;国泰君安证券股份有限公司上海江苏路证券营业部&quot;,
+			&quot;rank_tags&quot; : [ ]
+		},
+		{
+			&quot;buy_amount&quot; : 2110.2,
+			&quot;net_amount&quot; : 2110.2,
+			&quot;buy_ratio&quot; : 1.7,
+			&quot;sales_department&quot; : &quot;机构专用&quot;,
+			&quot;rank_tags&quot; : [ ]
+		},
+		{
+			&quot;buy_amount&quot; : 1134.72,
+			&quot;net_amount&quot; : 1134.72,
+			&quot;buy_ratio&quot; : 0.91,
+			&quot;sales_department&quot; : &quot;东方证券股份有限公司北海北海大道证券营业部&quot;,
+			&quot;rank_tags&quot; : [ ]
+		},
+		{
+			&quot;buy_amount&quot; : 916.7,
+			&quot;net_amount&quot; : 916.7,
+			&quot;buy_ratio&quot; : 0.74,
+			&quot;sales_department&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;,
+			&quot;rank_tags&quot; : [
+				&quot;今卖3&quot;
+			]
+		}
+	],
+	&quot;buy_ratio_total&quot; : 7.04,
+	&quot;px_change_rate&quot; : -1.84,
+	&quot;reason&quot; : &quot;有价格涨跌幅限制的日换手率达到20%&quot;,
+	&quot;date&quot; : &quot;2017-01-05&quot;,
+	&quot;buy_amount_total&quot; : 8732.04,
+	&quot;sell&quot; : [
+		{
+			&quot;net_amount&quot; : -3472.15,
+			&quot;sell_amount&quot; : 3472.15,
+			&quot;sell_ratio&quot; : 2.8,
+			&quot;sales_department&quot; : &quot;华泰证券股份有限公司浙江分公司&quot;,
+			&quot;rank_tags&quot; : [ ]
+		},
+		{
+			&quot;net_amount&quot; : -1443.99,
+			&quot;sell_amount&quot; : 1443.99,
+			&quot;sell_ratio&quot; : 1.16,
+			&quot;sales_department&quot; : &quot;国联证券股份有限公司杭州中山北路证券营业部&quot;,
+			&quot;rank_tags&quot; : [
+				&quot;前买4&quot;
+			]
+		},
+		{
+			&quot;net_amount&quot; : -1388.89,
+			&quot;sell_amount&quot; : 1388.89,
+			&quot;sell_ratio&quot; : 1.12,
+			&quot;sales_department&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;,
+			&quot;rank_tags&quot; : [
+				&quot;今买5&quot;
+			]
+		},
+		{
+			&quot;net_amount&quot; : -1347.92,
+			&quot;sell_amount&quot; : 1347.92,
+			&quot;sell_ratio&quot; : 1.09,
+			&quot;sales_department&quot; : &quot;华泰证券股份有限公司深圳益田路荣超商务中心证券营业部&quot;,
+			&quot;rank_tags&quot; : [ ]
+		},
+		{
+			&quot;net_amount&quot; : -1256.71,
+			&quot;sell_amount&quot; : 1256.71,
+			&quot;sell_ratio&quot; : 1.01,
+			&quot;sales_department&quot; : &quot;方正证券股份有限公司重庆新南路证券营业部&quot;,
+			&quot;rank_tags&quot; : [ ]
+		}
+	],
+	&quot;sell_amount_total&quot; : 8909.65,
+	&quot;stock_name&quot; : &quot;百合花&quot;,
+	&quot;stock_code&quot; : &quot;603823&quot;,
+	&quot;sell_ratio_total&quot; : 7.18,
+	&quot;net_amount_total&quot; : -177.61
+}
+</code></pre>
+
+<h3 id="查询语法">查询语法</h3>
+
+<pre><code class="language-go">db.billboards.find({&quot;sell&quot;:{&quot;$elemMatch&quot;:{&quot;sales_department&quot;:&quot;招商证券股份有限公司北京建国路证券营业部&quot;}}})
+</code></pre>
+
+<h3 id="未建立索引前语法分析">未建立索引前语法分析</h3>
+
+<pre><code class="language-go">godset:PRIMARY&gt; db.billboards.find({&quot;sell&quot;:{&quot;$elemMatch&quot;:{&quot;sales_department&quot;:&quot;招商证券股份有限公司北京建国路证券营业部&quot;}}}).explain(&quot;executionStats&quot;)
+{
+	&quot;queryPlanner&quot; : {
+		&quot;plannerVersion&quot; : 1,
+		&quot;namespace&quot; : &quot;god.billboards&quot;,
+		&quot;indexFilterSet&quot; : false,
+		&quot;parsedQuery&quot; : {
+			&quot;sell&quot; : {
+				&quot;$elemMatch&quot; : {
+					&quot;sales_department&quot; : {
+						&quot;$eq&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;
+					}
+				}
+			}
+		},
+		&quot;winningPlan&quot; : {
+			&quot;stage&quot; : &quot;COLLSCAN&quot;,
+			&quot;filter&quot; : {
+				&quot;sell&quot; : {
+					&quot;$elemMatch&quot; : {
+						&quot;sales_department&quot; : {
+							&quot;$eq&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;
+						}
+					}
+				}
+			},
+			&quot;direction&quot; : &quot;forward&quot;
+		},
+		&quot;rejectedPlans&quot; : [ ]
+	},
+	&quot;executionStats&quot; : {
+		&quot;executionSuccess&quot; : true,
+		&quot;nReturned&quot; : 609,
+		&quot;executionTimeMillis&quot; : 425,
+		&quot;totalKeysExamined&quot; : 0,
+		&quot;totalDocsExamined&quot; : 104022,
+		&quot;executionStages&quot; : {
+			&quot;stage&quot; : &quot;COLLSCAN&quot;,
+			&quot;filter&quot; : {
+				&quot;sell&quot; : {
+					&quot;$elemMatch&quot; : {
+						&quot;sales_department&quot; : {
+							&quot;$eq&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;
+						}
+					}
+				}
+			},
+			&quot;nReturned&quot; : 609,
+			&quot;executionTimeMillisEstimate&quot; : 410,
+			&quot;works&quot; : 104024,
+			&quot;advanced&quot; : 609,
+			&quot;needTime&quot; : 103414,
+			&quot;needYield&quot; : 0,
+			&quot;saveState&quot; : 812,
+			&quot;restoreState&quot; : 812,
+			&quot;isEOF&quot; : 1,
+			&quot;invalidates&quot; : 0,
+			&quot;direction&quot; : &quot;forward&quot;,
+			&quot;docsExamined&quot; : 104022
+		}
+	},
+	&quot;serverInfo&quot; : {
+		&quot;host&quot; : &quot;iZbp1g0z5ggogfbvwtitwjZ&quot;,
+		&quot;port&quot; : 37017,
+		&quot;version&quot; : &quot;3.2.8&quot;,
+		&quot;gitVersion&quot; : &quot;ed70e33130c977bda0024c125b56d159573dbaf0&quot;
+	},
+	&quot;ok&quot; : 1
+}
+</code></pre>
+
+<h3 id="建立索引">建立索引</h3>
+
+<pre><code class="language-go">db.billboards.createIndex({&quot;sell.sales_department&quot;:1},{&quot;background&quot;:true})
+</code></pre>
+
+<h3 id="查看索引">查看索引</h3>
+
+<pre><code class="language-go">godset:PRIMARY&gt; db.billboards.getIndexes()
+[
+	{
+		&quot;v&quot; : 1,
+		&quot;key&quot; : {
+			&quot;_id&quot; : 1
+		},
+		&quot;name&quot; : &quot;_id_&quot;,
+		&quot;ns&quot; : &quot;god.billboards&quot;
+	},
+	{
+		&quot;v&quot; : 1,
+		&quot;key&quot; : {
+			&quot;sell.sales_department&quot; : 1
+		},
+		&quot;name&quot; : &quot;sell.sales_department_1&quot;,
+		&quot;ns&quot; : &quot;god.billboards&quot;,
+		&quot;background&quot; : true
+	}
+]
+</code></pre>
+
+<h3 id="建立索引后语法分析">建立索引后语法分析</h3>
+
+<pre><code class="language-go">godset:PRIMARY&gt; db.billboards.find({&quot;sell&quot;:{&quot;$elemMatch&quot;:{&quot;sales_department&quot;:&quot;招商证券股份有限公司北京建国路证券营业部&quot;}}}).explain(&quot;executionStats&quot;)
+{
+	&quot;queryPlanner&quot; : {
+		&quot;plannerVersion&quot; : 1,
+		&quot;namespace&quot; : &quot;god.billboards&quot;,
+		&quot;indexFilterSet&quot; : false,
+		&quot;parsedQuery&quot; : {
+			&quot;sell&quot; : {
+				&quot;$elemMatch&quot; : {
+					&quot;sales_department&quot; : {
+						&quot;$eq&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;
+					}
+				}
+			}
+		},
+		&quot;winningPlan&quot; : {
+			&quot;stage&quot; : &quot;FETCH&quot;,
+			&quot;filter&quot; : {
+				&quot;sell&quot; : {
+					&quot;$elemMatch&quot; : {
+						&quot;sales_department&quot; : {
+							&quot;$eq&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;
+						}
+					}
+				}
+			},
+			&quot;inputStage&quot; : {
+				&quot;stage&quot; : &quot;IXSCAN&quot;,
+				&quot;keyPattern&quot; : {
+					&quot;sell.sales_department&quot; : 1
+				},
+				&quot;indexName&quot; : &quot;sell.sales_department_1&quot;,
+				&quot;isMultiKey&quot; : true,
+				&quot;isUnique&quot; : false,
+				&quot;isSparse&quot; : false,
+				&quot;isPartial&quot; : false,
+				&quot;indexVersion&quot; : 1,
+				&quot;direction&quot; : &quot;forward&quot;,
+				&quot;indexBounds&quot; : {
+					&quot;sell.sales_department&quot; : [
+						&quot;[\&quot;招商证券股份有限公司北京建国路证券营业部\&quot;, \&quot;招商证券股份有限公司北京建国路证券营业部\&quot;]&quot;
+					]
+				}
+			}
+		},
+		&quot;rejectedPlans&quot; : [ ]
+	},
+	&quot;executionStats&quot; : {
+		&quot;executionSuccess&quot; : true,
+		&quot;nReturned&quot; : 609,
+		&quot;executionTimeMillis&quot; : 9,
+		&quot;totalKeysExamined&quot; : 609,
+		&quot;totalDocsExamined&quot; : 609,
+		&quot;executionStages&quot; : {
+			&quot;stage&quot; : &quot;FETCH&quot;,
+			&quot;filter&quot; : {
+				&quot;sell&quot; : {
+					&quot;$elemMatch&quot; : {
+						&quot;sales_department&quot; : {
+							&quot;$eq&quot; : &quot;招商证券股份有限公司北京建国路证券营业部&quot;
+						}
+					}
+				}
+			},
+			&quot;nReturned&quot; : 609,
+			&quot;executionTimeMillisEstimate&quot; : 10,
+			&quot;works&quot; : 610,
+			&quot;advanced&quot; : 609,
+			&quot;needTime&quot; : 0,
+			&quot;needYield&quot; : 0,
+			&quot;saveState&quot; : 4,
+			&quot;restoreState&quot; : 4,
+			&quot;isEOF&quot; : 1,
+			&quot;invalidates&quot; : 0,
+			&quot;docsExamined&quot; : 609,
+			&quot;alreadyHasObj&quot; : 0,
+			&quot;inputStage&quot; : {
+				&quot;stage&quot; : &quot;IXSCAN&quot;,
+				&quot;nReturned&quot; : 609,
+				&quot;executionTimeMillisEstimate&quot; : 0,
+				&quot;works&quot; : 610,
+				&quot;advanced&quot; : 609,
+				&quot;needTime&quot; : 0,
+				&quot;needYield&quot; : 0,
+				&quot;saveState&quot; : 4,
+				&quot;restoreState&quot; : 4,
+				&quot;isEOF&quot; : 1,
+				&quot;invalidates&quot; : 0,
+				&quot;keyPattern&quot; : {
+					&quot;sell.sales_department&quot; : 1
+				},
+				&quot;indexName&quot; : &quot;sell.sales_department_1&quot;,
+				&quot;isMultiKey&quot; : true,
+				&quot;isUnique&quot; : false,
+				&quot;isSparse&quot; : false,
+				&quot;isPartial&quot; : false,
+				&quot;indexVersion&quot; : 1,
+				&quot;direction&quot; : &quot;forward&quot;,
+				&quot;indexBounds&quot; : {
+					&quot;sell.sales_department&quot; : [
+						&quot;[\&quot;招商证券股份有限公司北京建国路证券营业部\&quot;, \&quot;招商证券股份有限公司北京建国路证券营业部\&quot;]&quot;
+					]
+				},
+				&quot;keysExamined&quot; : 609,
+				&quot;dupsTested&quot; : 609,
+				&quot;dupsDropped&quot; : 0,
+				&quot;seenInvalidated&quot; : 0
+			}
+		}
+	},
+	&quot;serverInfo&quot; : {
+		&quot;host&quot; : &quot;iZbp1g0z5ggogfbvwtitwjZ&quot;,
+		&quot;port&quot; : 37017,
+		&quot;version&quot; : &quot;3.2.8&quot;,
+		&quot;gitVersion&quot; : &quot;ed70e33130c977bda0024c125b56d159573dbaf0&quot;
+	},
+	&quot;ok&quot; : 1
+}
+</code></pre>
+
+<h3 id="explain-方法">explain 方法</h3>
+
+<p>explain方法有个可选的参数verbose，是个字符串，他表示的是verbose的模式。一共分为3种模式：
+1. queryPlanner模式，这个是默认模式。MongoDB运行查询优化器对当前的查询进行评估并选择一个最佳的查询计划</p>
+
+<ol>
+<li><p>executionStats模式，mongoDB运行查询优化器对当前的查询进行评估并选择一个最佳的查询计划进行执行，在执行完毕后返回这个最佳执行计划执行完成时的相关统计信息，对于写操作db.collection.explain()返回关于更新和删除操作的信息，但是并不将修改应用到数据库，对于那些被拒绝的执行计划，不返回其统计信息</p></li>
+
+<li><p>allPlansExecution模式，该模式是前2种模式的更细化，即会包括上述2种模式的所有信息，即按照最佳的执行计划执行以及列出统计信息，而且还会列出一些候选的执行计划，如果有多个查询计划，executionStats信息包括这些执行计划的部分统计信息</p></li>
+</ol>
+
+<p>我们的目的是要记录执行find方法的耗时时间，所以用executionStats模式就可以了。返回的结果也是只关注executionStats就可以了
+- nReturned：表示该查询条件下返回的文档数量。
+- executionTimeMills：表示执行时间，单位毫秒
+- totalDocsExamined：表示该集合总共文档数。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>itstudying.lijq </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/>https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/mongo/">
+                    #mongo</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://blog.itstudying.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.itstudying.com/2019/golang_socket_websocket/" class="prev" rel="prev" title="Golang socket websocket"><i class="iconfont icon-left"></i>&nbsp;Golang socket websocket</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2015 - 2019</span>
+        
+        <span class="with-love">
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://blog.itstudying.com">itstudying.lijq</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">皖ICP备16024028号-2 </a> |
+         
+		  <span>本博客由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a> 强力驱动</span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+     </div>
+  </body>
+</html>
