@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="itstudying.lijq">
+  <meta name="description" content="Go语言,Golang开发,gopher,itstudying,李俊奇的个人主页. good good study,day day up.">
+  <meta name="keywords" content="itstudying, 个人主页, home, gopher, 李俊奇, 李俊奇的小站, 0.0">
+  
+  <link rel="prev" href="https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/" />
+  
+  <link rel="canonical" href="https://blog.itstudying.com/2019/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           grpc连接重连和数据传输 | itstudying
+       
+  </title>
+  <meta name="title" content="grpc连接重连和数据传输 | itstudying">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+ 
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.itstudying.com"
+    },
+    "articleSection" : "posts",
+    "name" : "grpc连接重连和数据传输",
+    "headline" : "grpc连接重连和数据传输",
+    "description" : "对grpc的连接、数据传输和重连相关做下知识整理，以下\n 基础知识 grpc是基于http2的，http2作为应用层协议相比http1能很好的支持多路复用，在一个连接上做更多的数据传输任务并且多个数据传输互不干扰\n1. 帧 http2的数据传输以帧为单位。帧的传输必须在流中进行\n2. 流 在建立连接后，帧的传输是在流中进行的，一个流的建立、传输和关闭，类似于一次http请求可以看做是一个完整的数据传输处理过程\n3. 简单理解 假设现有一个go程序，此程序中有20个goroutine,10个类型为chan []byte的channel，每两个goroutine操作一个channel向channel中发送和接收数据。那么对应http2，则go程序可以看成是一个http2连接，10个channel可以看成是这个连接中10个流，每个流都有一个客户端和服务端既goroutine，goroutine发送的[]byte类型的数据可以看成http2的帧，帧里面存储的是需要传输的数据和协议。\n连接和重连 连接示例： func dial(addr string) (*grpc.ClientConn, error) { dialOpts := []grpc.DialOption{ grpc.WithInsecure(), grpc.WithBlock(), } ctx, _ := context.WithTimeout(context.Background(), time.Second*5) rpcConn, err := grpc.DialContext(ctx, addr, dialOpts...) return rpcConn, err }  和grpc服务建立连接很简单，只需要调用函数Dail或者DialContext即可，Dial实际也就是调用了DialContext。\ngoogle.golang.org\/grpc\/clientconn.go \/\/ Dial creates a client connection to the given target. func Dial(target string, opts ...DialOption) (*ClientConn, error) { return DialContext(context.Background(), target, opts...) } func DialContext(ctx context.",
+    "inLanguage" : "en-us",
+    "author" : "itstudying",
+    "creator" : "itstudying",
+    "publisher": "itstudying",
+    "accountablePerson" : "itstudying",
+    "copyrightHolder" : "itstudying",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-12-14 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-12-14 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.itstudying.com\/2019\/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93\/",
+    "wordCount" : "812",
+    "keywords" : [ "golang","grpc", "itstudying"]
+}
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146687653-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-146687653-3');
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class=""></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.itstudying.com">itstudying</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="https://itstudying.com" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">grpc连接重连和数据传输</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://blog.itstudying.com" rel="author">itstudying</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-12-14 itemprop="datePublished">December 14, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/"> 后端 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<blockquote>
+<p>对grpc的连接、数据传输和重连相关做下知识整理，以下</p>
+</blockquote>
+
+<h2 id="基础知识">基础知识</h2>
+
+<p>grpc是基于http2的，http2作为应用层协议相比http1能很好的支持多路复用，在一个连接上做更多的数据传输任务并且多个数据传输互不干扰</p>
+
+<h4 id="1-帧">1. 帧</h4>
+
+<p>http2的数据传输以帧为单位。帧的传输必须在流中进行</p>
+
+<h4 id="2-流">2. 流</h4>
+
+<p>在建立连接后，帧的传输是在流中进行的，一个流的建立、传输和关闭，类似于一次http请求可以看做是一个完整的数据传输处理过程</p>
+
+<h4 id="3-简单理解">3. 简单理解</h4>
+
+<p>假设现有一个go程序，此程序中有20个<code>goroutine</code>,10个类型为<code>chan []byte</code>的<code>channel</code>，每两个<code>goroutine</code>操作一个<code>channel</code>向<code>channel</code>中发送和接收数据。那么对应http2，则go程序可以看成是一个http2连接，10个<code>channel</code>可以看成是这个连接中10个流，每个流都有一个客户端和服务端既<code>goroutine</code>，<code>goroutine</code>发送的<code>[]byte</code>类型的数据可以看成<code>http2</code>的<code>帧</code>，帧里面存储的是需要传输的数据和协议。</p>
+
+<h2 id="连接和重连">连接和重连</h2>
+
+<pre><code>连接示例：
+
+func dial(addr string) (*grpc.ClientConn, error) {
+	dialOpts := []grpc.DialOption{
+		grpc.WithInsecure(),
+		grpc.WithBlock(),
+	}
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
+	rpcConn, err := grpc.DialContext(ctx, addr, dialOpts...)
+	return rpcConn, err
+}
+</code></pre>
+
+<p>和grpc服务建立连接很简单，只需要调用函数Dail或者DialContext即可，Dial实际也就是调用了DialContext。</p>
+
+<pre><code>google.golang.org/grpc/clientconn.go
+
+
+// Dial creates a client connection to the given target.
+func Dial(target string, opts ...DialOption) (*ClientConn, error) {
+	return DialContext(context.Background(), target, opts...)
+}
+
+func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *ClientConn, err error) {
+    ...
+    
+    //配置负载均衡，默认是passthrough解析器
+    if cc.dopts.resolverBuilder == nil {
+		// Only try to parse target when resolver builder is not already set.
+		cc.parsedTarget = parseTarget(cc.target)
+		grpclog.Infof(&quot;parsed scheme: %q&quot;, cc.parsedTarget.Scheme)
+		cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
+		if cc.dopts.resolverBuilder == nil {
+			// 如果解析器是空的则使用默认的负载均衡解析器
+			grpclog.Infof(&quot;scheme %q not registered, fallback to default scheme&quot;, cc.parsedTarget.Scheme)
+			cc.parsedTarget = resolver.Target{
+				Scheme:   resolver.GetDefaultScheme(),
+				Endpoint: target,
+			}
+			cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
+		}
+	} else {
+		cc.parsedTarget = resolver.Target{Endpoint: target}
+	}
+    ...
+
+}
+</code></pre>
+
+<p>查看源码<code>DialContext</code>，grpc的连接默认是异步处理，既调用此方法实际并没有做连接操作，只是配置了下给定的和默认的配置然后返回了个<code>ClientConn</code>的指针而已。如果在调用此方法时传入了<code>WithBlocks</code>方法，则会在程序末尾一直等到连接成功后才会结束方法。连接操作是新在此方法的配置好负载均衡解析器之后调用了rb.Build方法并且传入<code>ccResolverWrapper</code>对象后开启连接，如下代码</p>
+
+<pre><code>google.golang.org/grpc/resolver_conn_wrapper.go
+
+
+//根据用户的选择生成对应的负载均衡解析器并执行Build方法
+func newCCResolverWrapper(cc *ClientConn) (*ccResolverWrapper, error) {
+	rb := cc.dopts.resolverBuilder
+	if rb == nil {
+		return nil, fmt.Errorf(&quot;could not get resolver for scheme: %q&quot;, cc.parsedTarget.Scheme)
+	}
+
+	ccr := &amp;ccResolverWrapper{
+		cc:     cc,
+		addrCh: make(chan []resolver.Address, 1),
+		scCh:   make(chan string, 1),
+	}
+
+	var err error
+	ccr.resolver, err = rb.Build(cc.parsedTarget, ccr, resolver.BuildOption{DisableServiceConfig: cc.dopts.disableServiceConfig})
+	if err != nil {
+		return nil, err
+	}
+	return ccr, nil
+}
+</code></pre>
+
+<p>默认解析器<code>passthrough.Build</code>方法会生成一个对象并开启<code>start</code>方法，此方法会调用<code>ccResolverWrapper</code>实现的<code>UpdateState</code>方法初始化负载均衡。</p>
+
+<pre><code>google.golang.org/grpc/balancer_conn_wrappers.go
+
+func newCCBalancerWrapper(cc *ClientConn, b balancer.Builder, bopts balancer.BuildOptions) *ccBalancerWrapper {
+	ccb := &amp;ccBalancerWrapper{
+		cc:               cc,
+		stateChangeQueue: newSCStateUpdateBuffer(),
+		ccUpdateCh:       make(chan *balancer.ClientConnState, 1),
+		done:             make(chan struct{}),
+		subConns:         make(map[*acBalancerWrapper]struct{}),
+	}
+	go ccb.watcher()
+	ccb.balancer = b.Build(ccb, bopts)
+	return ccb
+}
+</code></pre>
+
+<p>初始化负载均衡后会新建goroutine调用<code>watcher</code>方法，在此方法里会调用<code>ccBalancerWrapper.UpdateBalancerState</code>方法修改连接状态以及调用<code>acBalancerWrapper.acBalancerWrapper</code>方法和grpc服务建立连接</p>
+
+<pre><code>google.golang.org/grpc/pickfirst.go
+func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
+	if err != nil {
+		if grpclog.V(2) {
+			grpclog.Infof(&quot;pickfirstBalancer: HandleResolvedAddrs called with error %v&quot;, err)
+		}
+		return
+	}
+	if b.sc == nil {
+		b.sc, err = b.cc.NewSubConn(addrs, balancer.NewSubConnOptions{})
+		if err != nil {
+			//TODO(yuxuanli): why not change the cc state to Idle?
+			if grpclog.V(2) {
+				grpclog.Errorf(&quot;pickfirstBalancer: failed to NewSubConn: %v&quot;, err)
+			}
+			return
+		}
+		b.cc.UpdateBalancerState(connectivity.Idle, &amp;picker{sc: b.sc})
+		b.sc.Connect()
+	} else {
+		b.sc.UpdateAddresses(addrs)
+		b.sc.Connect()
+	}
+}
+</code></pre>
+
+<p>建立连接前再次修改状态，后开启goroutine运行<code>resetTransport</code>方法</p>
+
+<pre><code>google.golang.org/grpc/clientconn.go
+
+
+// connect starts creating a transport.
+// It does nothing if the ac is not IDLE.
+// TODO(bar) Move this to the addrConn section.
+func (ac *addrConn) connect() error {
+	ac.mu.Lock()
+	if ac.state == connectivity.Shutdown {
+		ac.mu.Unlock()
+		return errConnClosing
+	}
+	if ac.state != connectivity.Idle {
+		ac.mu.Unlock()
+		return nil
+	}
+	// Update connectivity state within the lock to prevent subsequent or
+	// concurrent calls from resetting the transport more than once.
+	ac.updateConnectivityState(connectivity.Connecting)
+	ac.mu.Unlock()
+
+	// Start a goroutine connecting to the server asynchronously.
+	go ac.resetTransport()
+	return nil
+}
+</code></pre>
+
+<p><code>resetTransport</code>方法是个死循环，会在程序刚启动以及运行时服务断开连接需要重连时执行循环体内容调用<code>tryAllAddrs</code>方法，连接成功后会阻塞在循环底部，</p>
+
+<pre><code>google.golang.org/grpc/clientconn.go
+
+
+func (ac *addrConn) resetTransport() {
+	for i := 0; ; i++ {
+		if i &gt; 0 {
+			ac.cc.resolveNow(resolver.ResolveNowOption{})
+		}
+
+		ac.mu.Lock()
+		if ac.state == connectivity.Shutdown {
+			ac.mu.Unlock()
+			return
+		}
+
+		addrs := ac.addrs
+        ···
+		connectDeadline := time.Now().Add(dialDuration)
+
+		ac.updateConnectivityState(connectivity.Connecting)
+		ac.transport = nil
+		ac.mu.Unlock()
+
+		newTr, addr, reconnect, err := ac.tryAllAddrs(addrs, connectDeadline)
+		if err != nil {
+			// After exhausting all addresses, the addrConn enters
+			// TRANSIENT_FAILURE.
+			ac.mu.Lock()
+			if ac.state == connectivity.Shutdown {
+				ac.mu.Unlock()
+				return
+			}
+			ac.updateConnectivityState(connectivity.TransientFailure)
+
+		}
+
+		&lt;-reconnect.Done()
+		hcancel()
+        ···
+	}
+}
+</code></pre>
+
+<p><code>tryAllAddrs</code>调用<code>addrConn.createTransport</code>方法完成连接</p>
+
+<pre><code>google.golang.org/grpc/clientconn.go
+
+
+func (ac *addrConn) createTransport(addr resolver.Address, copts transport.ConnectOptions, connectDeadline time.Time) (transport.ClientTransport, *grpcsync.Event, error) {
+	prefaceReceived := make(chan struct{})
+	onCloseCalled := make(chan struct{})
+	reconnect := grpcsync.NewEvent()
+
+	target := transport.TargetInfo{
+		Addr:      addr.Addr,
+		Metadata:  addr.Metadata,
+		Authority: ac.cc.authority,
+	}
+
+	once := sync.Once{}
+	onGoAway := func(r transport.GoAwayReason) {
+		ac.mu.Lock()
+		ac.adjustParams(r)
+		once.Do(func() {
+			if ac.state == connectivity.Ready {
+				// Prevent this SubConn from being used for new RPCs by setting its
+				// state to Connecting.
+				//
+				// TODO: this should be Idle when grpc-go properly supports it.
+				ac.updateConnectivityState(connectivity.Connecting)
+			}
+		})
+		ac.mu.Unlock()
+		reconnect.Fire()
+	}
+
+	onClose := func() {
+		ac.mu.Lock()
+		once.Do(func() {
+			if ac.state == connectivity.Ready {
+				// Prevent this SubConn from being used for new RPCs by setting its
+				// state to Connecting.
+				//
+				// TODO: this should be Idle when grpc-go properly supports it.
+				ac.updateConnectivityState(connectivity.Connecting)
+			}
+		})
+		ac.mu.Unlock()
+		close(onCloseCalled)
+		reconnect.Fire()
+	}
+
+	onPrefaceReceipt := func() {
+		close(prefaceReceived)
+	}
+
+	connectCtx, cancel := context.WithDeadline(ac.ctx, connectDeadline)
+	defer cancel()
+	if channelz.IsOn() {
+		copts.ChannelzParentID = ac.channelzID
+	}
+
+	newTr, err := transport.NewClientTransport(connectCtx, ac.cc.ctx, target, copts, onPrefaceReceipt, onGoAway, onClose)
+	if err != nil {
+		// newTr is either nil, or closed.
+		grpclog.Warningf(&quot;grpc: addrConn.createTransport failed to connect to %v. Err :%v. Reconnecting...&quot;, addr, err)
+		return nil, nil, err
+	}
+
+	select {
+	case &lt;-time.After(connectDeadline.Sub(time.Now())):
+		// We didn't get the preface in time.
+		newTr.Close()
+		grpclog.Warningf(&quot;grpc: addrConn.createTransport failed to connect to %v: didn't receive server preface in time. Reconnecting...&quot;, addr)
+		return nil, nil, errors.New(&quot;timed out waiting for server handshake&quot;)
+	case &lt;-prefaceReceived:
+		// We got the preface - huzzah! things are good.
+	case &lt;-onCloseCalled:
+		// The transport has already closed - noop.
+		return nil, nil, errors.New(&quot;connection closed&quot;)
+		// TODO(deklerk) this should bail on ac.ctx.Done(). Add a test and fix.
+	}
+	return newTr, reconnect, nil
+}
+</code></pre>
+
+<p>如果连接建立成功则程序正常执行，连接失败则报错误信息，能看到这里会注册两个事件方法，一个是<code>onGoAway</code>当服务端下发`<code>GOAWAY</code>帧时执行此方法（服务端会不再接受新流，且完成之前创建的新流）<a href="http://http2.github.io/http2-spec/#rfc.section.6.8/" rel="nofollow noreferrer" target="_blank">关于GOAWAY帧的介绍</a>，一个是<code>onClose</code>当连接关闭时执行此方法，两个方法都会修改连接的状态，并且调用<code>grpcsync.Fire</code>方法close掉内部的通知<code>channel</code> <code>c</code>，此channel只是用于通知<code>resetTransport</code>方法：此链接需要重新连接。</p>
+
+<h2 id="数据传输">数据传输</h2>
+
+<p>使用protoc命令可以把proto文件生成类似的代码，下方为一元请求的代码</p>
+
+<pre><code>func (c *T1ServiceClient) GetFirst(ctx context.Context, in *T1Request, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, &quot;/t1.t1Service/GetFirst&quot;, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+</code></pre>
+
+<p>其中invoke方法调用<code>newClientStream</code>创建一个流，并且在发送数据后阻塞等待接收数据响应。</p>
+
+<h2 id="资料">资料</h2>
+
+<p><a href="http://www.blogjava.net/yongboy/archive/2015/03/19/423611.aspx" rel="nofollow noreferrer" target="_blank">http2笔记之流和多路复用</a></p>
+
+<p><a href="http://http2.github.io/http2-spec/#rfc.section.6.8/" rel="nofollow noreferrer" target="_blank">关于GOAWAY帧的介绍</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>itstudying.lijq </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://blog.itstudying.com/2019/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/>https://blog.itstudying.com/2019/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/golang/">
+                    #golang</a></span>
+            
+            <span class="tag"><a href="https://blog.itstudying.com/tags/grpc/">
+                    #grpc</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://blog.itstudying.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.itstudying.com/2019/mongo%E4%B8%AD%E6%A0%B9%E6%8D%AE%E6%95%B0%E7%BB%84%E5%8C%B9%E9%85%8D%E6%97%B6%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BB%BA%E7%AB%8B/" class="prev" rel="prev" title="mongo中根据数组匹配（$elemMatch）时索引的建立"><i class="iconfont icon-left"></i>&nbsp;mongo中根据数组匹配（$elemMatch）时索引的建立</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2015 - 2020</span>
+        
+        <span class="with-love">
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://blog.itstudying.com">itstudying.lijq</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">皖ICP备16024028号-2 </a> |
+         
+		  <span>本博客由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a> 强力驱动</span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+     </div>
+  </body>
+</html>

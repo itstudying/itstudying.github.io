@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>grpc on itstudying</title>
+    <link>https://blog.itstudying.com/tags/grpc/</link>
+    <description>Recent content in grpc on itstudying</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 14 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.itstudying.com/tags/grpc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>grpc连接重连和数据传输</title>
+      <link>https://blog.itstudying.com/2019/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/</link>
+      <pubDate>Sat, 14 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/2019/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/</guid>
+      <description>对grpc的连接、数据传输和重连相关做下知识整理，以下
+ 基础知识 grpc是基于http2的，http2作为应用层协议相比http1能很好的支持多路复用，在一个连接上做更多的数据传输任务并且多个数据传输互不干扰
+1. 帧 http2的数据传输以帧为单位。帧的传输必须在流中进行
+2. 流 在建立连接后，帧的传输是在流中进行的，一个流的建立、传输和关闭，类似于一次http请求可以看做是一个完整的数据传输处理过程
+3. 简单理解 假设现有一个go程序，此程序中有20个goroutine,10个类型为chan []byte的channel，每两个goroutine操作一个channel向channel中发送和接收数据。那么对应http2，则go程序可以看成是一个http2连接，10个channel可以看成是这个连接中10个流，每个流都有一个客户端和服务端既goroutine，goroutine发送的[]byte类型的数据可以看成http2的帧，帧里面存储的是需要传输的数据和协议。
+连接和重连 连接示例： func dial(addr string) (*grpc.ClientConn, error) { dialOpts := []grpc.DialOption{ grpc.WithInsecure(), grpc.WithBlock(), } ctx, _ := context.WithTimeout(context.Background(), time.Second*5) rpcConn, err := grpc.DialContext(ctx, addr, dialOpts...) return rpcConn, err }  和grpc服务建立连接很简单，只需要调用函数Dail或者DialContext即可，Dial实际也就是调用了DialContext。
+google.golang.org/grpc/clientconn.go // Dial creates a client connection to the given target. func Dial(target string, opts ...DialOption) (*ClientConn, error) { return DialContext(context.Background(), target, opts...) } func DialContext(ctx context.</description>
+    </item>
+    
+  </channel>
+</rss>
