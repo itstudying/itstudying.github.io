@@ -17,9 +17,10 @@
       <pubDate>Sun, 09 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>https://blog.itstudying.com/2020/gomod%E5%AF%BC%E5%85%A5%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9D%97/</guid>
-      <description>gomod交叉编译cannot find module for path… 新建项目准备使用gomod管理依赖，而且项目没放在gopath的时候发现个问题，go build -o SI-Kline-Minute cmd/main.go能通过，GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd/main.go进行交叉编译报找不到module错误
-环境 项目结构
-├── Makefile ├── README.md ├── SI-Kline-Minute ├── cmd │ └── main.go ├── common │ ├── db │ │ ├── mongo │ │ │ └── mongo.go │ │ └── redis │ ├── log │ │ └── logger.go │ └── utils │ └── utils.go ├── config │ └── config.go ├── config.toml ├── go.mod ├── go.</description>
+      <description>如果想要在一个模块中引入本地的另一个模块，可以使用replace方法来完成。
+本地项目1：hsl-hq
+code/hsl/hsl-hq . ├── README.md ├── go.mod ├── market │ ├── internal │ │ ├── hk │ │ │ ├── tradeday.go │ │ │ └── tradeday_test.go │ │ └── nohk │ │ ├── tradeday.go │ │ └── tradeday_test.go │ ├── tradeday.go │ └── tradeday_test.go └── vendor └── vendor.json  本地项目2：hk-search
+code/hsl/hk-search . ├── Makefile ├── README.md ├── cmd │ ├── main.go └── src ├── serv │ ├── ma.go └── util └── util.</description>
     </item>
     
     <item>

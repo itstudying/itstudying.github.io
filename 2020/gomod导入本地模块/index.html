@@ -45,7 +45,7 @@
     "articleSection" : "posts",
     "name" : "gomod导入本地模块",
     "headline" : "gomod导入本地模块",
-    "description" : "gomod交叉编译cannot find module for path… 新建项目准备使用gomod管理依赖，而且项目没放在gopath的时候发现个问题，go build -o SI-Kline-Minute cmd\/main.go能通过，GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd\/main.go进行交叉编译报找不到module错误\n环境 项目结构\n├── Makefile ├── README.md ├── SI-Kline-Minute ├── cmd │ └── main.go ├── common │ ├── db │ │ ├── mongo │ │ │ └── mongo.go │ │ └── redis │ ├── log │ │ └── logger.go │ └── utils │ └── utils.go ├── config │ └── config.go ├── config.toml ├── go.mod ├── go.",
+    "description" : "如果想要在一个模块中引入本地的另一个模块，可以使用replace方法来完成。\n本地项目1：hsl-hq\ncode\/hsl\/hsl-hq . ├── README.md ├── go.mod ├── market │ ├── internal │ │ ├── hk │ │ │ ├── tradeday.go │ │ │ └── tradeday_test.go │ │ └── nohk │ │ ├── tradeday.go │ │ └── tradeday_test.go │ ├── tradeday.go │ └── tradeday_test.go └── vendor └── vendor.json  本地项目2：hk-search\ncode\/hsl\/hk-search . ├── Makefile ├── README.md ├── cmd │ ├── main.go └── src ├── serv │ ├── ma.go └── util └── util.",
     "inLanguage" : "en-us",
     "author" : "itstudying",
     "creator" : "itstudying",
@@ -56,7 +56,7 @@
     "datePublished": "2020-02-09 00:00:00 \x2b0000 UTC",
     "dateModified" : "2020-02-09 00:00:00 \x2b0000 UTC",
     "url" : "https:\/\/blog.itstudying.com\/2020\/gomod%E5%AF%BC%E5%85%A5%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9D%97\/",
-    "wordCount" : "169",
+    "wordCount" : "145",
     "keywords" : [ "golang","gomod","module", "itstudying"]
 }
 </script>
@@ -158,112 +158,90 @@
 
           
 
-<h1 id="gomod交叉编译cannot-find-module-for-path">gomod交叉编译cannot find module for path…</h1>
-
-<p>新建项目准备使用<code>gomod</code>管理依赖，而且项目没放在<code>gopath</code>的时候发现个问题，<code>go build -o SI-Kline-Minute cmd/main.go</code>能通过，<code>GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd/main.go</code>进行交叉编译报找不到module错误</p>
+<p>如果想要在一个模块中引入本地的另一个模块，可以使用<code>replace</code>方法来完成。</p>
 
 <hr />
 
-<h2 id="环境">环境</h2>
+<p>本地项目1：<code>hsl-hq</code></p>
 
-<p><em>项目结构</em></p>
-
-<pre><code class="language-go">├── Makefile
+<pre><code class="language-go">code/hsl/hsl-hq  
+.
 ├── README.md
-├── SI-Kline-Minute
-├── cmd
-│   └── main.go
-├── common
-│   ├── db
-│   │   ├── mongo
-│   │   │   └── mongo.go
-│   │   └── redis
-│   ├── log
-│   │   └── logger.go
-│   └── utils
-│       └── utils.go
-├── config
-│   └── config.go
-├── config.toml
 ├── go.mod
-├── go.sum
-├── logs
-├── models
-│   ├── internal.go
-│   ├── kline.go
-│   └── stock.go
+├── market
+│   ├── internal
+│   │   ├── hk
+│   │   │   ├── tradeday.go
+│   │   │   └── tradeday_test.go
+│   │   └── nohk
+│   │       ├── tradeday.go
+│   │       └── tradeday_test.go
+│   ├── tradeday.go
+│   └── tradeday_test.go
 └── vendor
-    ...
-    └── modules.txt
+    └── vendor.json
 
 </code></pre>
 
-<p><em>env</em></p>
+<p>本地项目2：<code>hk-search</code></p>
 
-<pre><code class="language-go">GO111MODULE=&quot;on&quot;
-GOARCH=&quot;amd64&quot;
-GOBIN=&quot;&quot;
-GOCACHE=&quot;/Users/itstudying/Library/Caches/go-build&quot;
-GOENV=&quot;/Users/itstudying/Library/Application Support/go/env&quot;
-GOEXE=&quot;&quot;
-GOFLAGS=&quot; -mod=vendor&quot;
-GOHOSTARCH=&quot;amd64&quot;
-GOHOSTOS=&quot;darwin&quot;
-GONOPROXY=&quot;&quot;
-GONOSUMDB=&quot;&quot;
-GOOS=&quot;darwin&quot;
-GOPATH=&quot;/Users/itstudying/code/go&quot;
-GOPRIVATE=&quot;&quot;
-GOPROXY=&quot;https://goproxy.io&quot;
-GOROOT=&quot;/usr/local/go&quot;
-GOSUMDB=&quot;sum.golang.org&quot;
-GOTMPDIR=&quot;&quot;
-GOTOOLDIR=&quot;/usr/local/go/pkg/tool/darwin_amd64&quot;
-GCCGO=&quot;gccgo&quot;
-AR=&quot;ar&quot;
-CC=&quot;clang&quot;
-CXX=&quot;clang++&quot;
-CGO_ENABLED=&quot;1&quot;
-GOMOD=&quot;/Users/itstudying/code/hsl/SI-Kline-Minute/go.mod&quot;
-CGO_CFLAGS=&quot;-g -O2&quot;
-CGO_CPPFLAGS=&quot;&quot;
-CGO_CXXFLAGS=&quot;-g -O2&quot;
-CGO_FFLAGS=&quot;-g -O2&quot;
-CGO_LDFLAGS=&quot;-g -O2&quot;
-PKG_CONFIG=&quot;pkg-config&quot;
-GOGCCFLAGS=&quot;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/gt/jqhlsj9126z_qlrnfbkvhshm0000gn/T/go-build003969582=/tmp/go-build -gno-record-gcc-switches -fno-common&quot;
-
+<pre><code class="language-go">code/hsl/hk-search  
+.
+├── Makefile
+├── README.md
+├── cmd
+│   ├── main.go
+└── src
+    ├── serv
+    │   ├── ma.go
+    └── util
+        └── util.go
 </code></pre>
 
-<p><em>version</em></p>
+<p><code>hk-search</code> 依赖 <code>hsl-hq</code>里的方法，项目使用<code>gomod</code>管理依赖，想要导入本地<code>hsl-hq</code>中的方法需要执行一下步骤
+1. 在<code>hsl-hq</code>中把<code>module</code>改为<code>域名/hsl-hq</code>的形式，如改成<code>itstudying.com/hsl-hq</code>。
+2. 在<code>hsl-hq</code>和<code>hk-search</code>中把导入的路径改为<code>itstudying.com/hsl-hq</code>前缀的形式
+3. 在<code>hk-search</code>中执行命令把<code>itstudying.com/hsl-hq</code>替换为<code>../hsl-hq</code>，<code>../hsl-hq</code>为<code>hsl-hq</code>在<code>hk-search</code>的本地相对路径</p>
 
-<pre><code class="language-go">go version
-go version go1.13 darwin/amd64
+<pre><code class="language-go">go mod edit -replace itstudying.com/hsl-hq=../hsl-hq
 </code></pre>
 
-<hr />
-
-<h2 id="问题">问题</h2>
+<h3 id="踩坑">踩坑</h3>
 
 <ol>
-<li><p>执行<code>go build</code> 进行打包能成功</p>
+<li><p>在 go1.13 中， <code>gomod</code> <strong>名称规范要求路径的第一部分必须满足域名规范</strong>，否则可能汇报类似 <code>malformed module path &quot;article&quot;: missing dot in first path element</code> 这样的错误。当然，在 go1.12 不会有报这个错误。如果是公司内部使用，建议可以替换成公司内部域名。所以在<code>hsl-hq</code>这个项目中初始化<code>gomod</code>必须使用<code>go mod init itstudying.com/hsl-hq</code>这种方式，<strong>且本项目和调用方导入包时前缀要和<code>module</code>名一致</strong>，否则依然会报上面的错误</p>
 
-<pre><code class="language-go">go build cmd/main.go
+<pre><code class="language-go">go.mod 文件:
+
+module itstudying.com/hsl-hq
+
+go 1.13
+</code></pre>
+
+<pre><code class="language-go">导入
+
+import (
+	&quot;errors&quot;
+	&quot;itstudying.com/hsl-hq/utils&quot;
+	&quot;strconv&quot;
+	&quot;time&quot;
+)
 </code></pre></li>
 
-<li><p>交叉编译打包失败</p>
+<li><p>项目中使用了<code>github.com/Sirupsen/logrus</code>这个库，需要把项目名<code>Sirupsen</code>替换成<code>sirupsen</code>。</p>
 
-<pre><code class="language-go">GOOS=linux GOARCH=amd64 go build cmd/main.go                  
-build command-line-arguments: cannot find module for path SI-Kline-Minute/common/utils
+<pre><code class="language-go">go mod edit -replace github.com/Sirupsen/logrus@v1.4.2=github.com/sirupsen/logrus@latest
+</code></pre></li>
+
+<li><p>在<code>hk-search</code>中执行<code>go mod tidy</code>报错提示如下所示，这是因为<code>hsl-hq</code>中把<code>module</code>设置成了<code>itsutdying.com/hsl-hq</code>，此时把<code>hk-search</code>中的所有<code>hsl-hq</code>改成<code>itstudying.com/hsl-hq</code>就行了。</p>
+
+<pre><code class="language-go">报错提示 
+
+hk-search/src/serv imports
+    hsl-hq/market: malformed module path &quot;hsl-hq/market&quot;: missing dot in first path element
 
 </code></pre></li>
 </ol>
-
-<p>查问题期间尝试了重命名包，修改<code>gomod</code>相关配置，把go从1.12升级至1.13依然没解决，甚至怀疑是不是大小写的问题。全部无果后细心观察<code>utils</code>包有啥特殊的地方，因为新建项目，代码量很少，从<code>项目结构</code>能看出<code>utils</code>和<code>log</code>, <code>db</code>是处在同级中，但是<code>log</code>和<code>db</code>却很正常，他们之间唯一区别是<code>log</code>包和<code>db</code>包需要在main中做些初始化的操作，所以会在<code>main</code>中就调用这两个包的方法，而<code>utils</code>包不需要，仅仅只有这个区别，然后抱着死马当成活马医的心理去尝试下，在main文件里加上初始化utils包的代码<code>_ &quot;SI-Kline-Minute/common/utils&quot;</code>，然后。。。。。。。。竟然编译通过了</p>
-
-<p>反复尝试，加上初始化代码能通过，去掉初始化代码编译报错找不到module</p>
-
-<p>加上初始化代码这样子能解决问题，而且也没觉得会有什么不妥，。。。。</p>
 
     </div>
 
