@@ -4,7 +4,7 @@
     <url>
       <loc>https://blog.itstudying.com/categories/</loc>
       
-      <lastmod>2020-01-14T00:00:00+00:00</lastmod>
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
       
       
       
@@ -12,9 +12,29 @@
     </url>
   
     <url>
-      <loc>https://blog.itstudying.com/tags/go/</loc>
+      <loc>https://blog.itstudying.com/tags/golang/</loc>
       
-      <lastmod>2020-01-14T00:00:00+00:00</lastmod>
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.itstudying.com/tags/gomod/</loc>
+      
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.itstudying.com/2020/gomod%E5%AF%BC%E5%85%A5%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9D%97/</loc>
+      
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
       
       
       
@@ -24,7 +44,7 @@
     <url>
       <loc>https://blog.itstudying.com/</loc>
       
-      <lastmod>2020-01-14T00:00:00+00:00</lastmod>
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
       
       
       
@@ -32,9 +52,9 @@
     </url>
   
     <url>
-      <loc>https://blog.itstudying.com/tags/jaeger/</loc>
+      <loc>https://blog.itstudying.com/tags/module/</loc>
       
-      <lastmod>2020-01-14T00:00:00+00:00</lastmod>
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
       
       
       
@@ -44,7 +64,7 @@
     <url>
       <loc>https://blog.itstudying.com/posts/</loc>
       
-      <lastmod>2020-01-14T00:00:00+00:00</lastmod>
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
       
       
       
@@ -53,6 +73,26 @@
   
     <url>
       <loc>https://blog.itstudying.com/tags/</loc>
+      
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/</loc>
+      
+      <lastmod>2020-02-09T00:00:00+00:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.itstudying.com/tags/jaeger/</loc>
       
       <lastmod>2020-01-14T00:00:00+00:00</lastmod>
       
@@ -82,16 +122,6 @@
     </url>
   
     <url>
-      <loc>https://blog.itstudying.com/tags/golang/</loc>
-      
-      <lastmod>2019-12-14T00:00:00+00:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
       <loc>https://blog.itstudying.com/tags/grpc/</loc>
       
       <lastmod>2019-12-14T00:00:00+00:00</lastmod>
@@ -103,16 +133,6 @@
   
     <url>
       <loc>https://blog.itstudying.com/2019/grpc%E8%BF%9E%E6%8E%A5%E9%87%8D%E8%BF%9E%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/</loc>
-      
-      <lastmod>2019-12-14T00:00:00+00:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://blog.itstudying.com/categories/%E5%90%8E%E7%AB%AF/</loc>
       
       <lastmod>2019-12-14T00:00:00+00:00</lastmod>
       
@@ -252,27 +272,7 @@
     </url>
   
     <url>
-      <loc>https://blog.itstudying.com/tags/gomod/</loc>
-      
-      <lastmod>2019-03-27T00:00:00+00:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
       <loc>https://blog.itstudying.com/2019/gomod%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91cannot_find_module_for_path/</loc>
-      
-      <lastmod>2019-03-27T00:00:00+00:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://blog.itstudying.com/tags/module/</loc>
       
       <lastmod>2019-03-27T00:00:00+00:00</lastmod>
       

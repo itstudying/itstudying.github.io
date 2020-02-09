@@ -6,10 +6,38 @@
     <description>Recent content in golang on itstudying</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 09 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.itstudying.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>gomod导入本地模块</title>
+      <link>https://blog.itstudying.com/2020/gomod%E5%AF%BC%E5%85%A5%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9D%97/</link>
+      <pubDate>Sun, 09 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/2020/gomod%E5%AF%BC%E5%85%A5%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9D%97/</guid>
+      <description>gomod交叉编译cannot find module for path… 新建项目准备使用gomod管理依赖，而且项目没放在gopath的时候发现个问题，go build -o SI-Kline-Minute cmd/main.go能通过，GOOS=linux GOARCH=amd64 go build -o SI-Kline-Minute cmd/main.go进行交叉编译报找不到module错误
+环境 项目结构
+├── Makefile ├── README.md ├── SI-Kline-Minute ├── cmd │ └── main.go ├── common │ ├── db │ │ ├── mongo │ │ │ └── mongo.go │ │ └── redis │ ├── log │ │ └── logger.go │ └── utils │ └── utils.go ├── config │ └── config.go ├── config.toml ├── go.mod ├── go.</description>
+    </item>
+    
+    <item>
+      <title>微服务链路追踪-jaeger部署和使用</title>
+      <link>https://blog.itstudying.com/2020/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA-jaeger/</link>
+      <pubDate>Tue, 14 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.itstudying.com/2020/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA-jaeger/</guid>
+      <description>四 部署 因为不是所有机器都安装有docker，所以会有docker和二进制两种方式部署
+1. 部署elasticsearch docker pull es镜像时必须指定版本号
+docker pull elasticsearch:6.4.2  启动
+docker run -d -p 9200:9200 -p 9300:9300 -v /data1/elasticsearch/data:/usr/share/elasticsearch/data -v /data1/elasticsearch/logs:/usr/share/elasticsearch/logs -e &amp;quot;discovery.type=single-node&amp;quot; -e ES_JAVA_OPTS=&amp;quot;-Xms512m -Xmx512m&amp;quot; --restart=always --name es elasticsearch:6.4.2  启动后如果遇到报错说没权限Permission denied，则把-v指定的目录赋予权限执行
+chmod +777 /data1/elasticsearch/data  重新启动es
+docker start es   ES_JAVA_OPTS 指定jvm虚拟机内存 restart=always 程序异常退出后自动重启
+2. 部署collector 1. 使用supervisor部署 官网上并没有详细介绍collector的部署，不过一般默认参数然后根据存储引擎做相应配置就够用，想看详细参数可以执行
+二进制程序生成collector文档 ./jaeger-collector docs  使用supervisor管理jaeger-collector程序
+[program:jaeger-collector] command=/data1/jaeger/jaeger-collector --log-level=debug autostart=true autorestart=true directory=/data1/jaeger startsecs=10 environment=SPAN_STORAGE_TYPE=elasticsearch,ES_SERVER_URLS=http://你的esip:9200 stdout_logfile=/data1/jaeger/logs/collector-info.log stdout_logfile_maxbytes=100MB stdout_logfile_backups=10 stdout_capture_maxbytes=1MB stderr_logfile=/data1/jaeger/logs/collector-err.</description>
+    </item>
     
     <item>
       <title>grpc连接重连和数据传输</title>
